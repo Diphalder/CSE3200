@@ -340,6 +340,13 @@ if ($type != "Teacher") {
                 </form>
             </div>
 
+
+            <div class="btn-group">
+                <form method='post'>
+                    <button type="submit" class="btn btn-primary" name="inputco">Input CO marks</button>
+                </form>
+            </div>
+
             <div class="btn-group">
                 <form method='post'>
                     <button type="submit" class="btn btn-primary" name="co">Course Outcome</button>
@@ -358,6 +365,431 @@ if ($type != "Teacher") {
 
     <?php
 
+    // _____________input co marks________________-
+    if (isset($_POST["inputco"])) {
+
+        echo '<script type="text/javascript">myFunction();</script>';
+        global $id, $con;
+        $s = "SELECT distinct(courselist.cid) , courselist.ccode , courselist.cname FROM courselist, course WHERE courselist.cid = course.cid and course.personID=$id  and courselist.type ='Theory' ";
+        $result = mysqli_query($con, $s);
+        $num = mysqli_num_rows($result);
+        if ($num != 0) {
+
+    ?>
+            <div class="d-flex justify-content-center">
+                <div class="list">
+                    <form method='post'>
+                        <h2> Input CO Marks </h2>
+                        <div>
+                            <label>Course Code</label>
+                            <select class="form-control" name="course" required>
+                                <?php
+                                global $id, $con;
+                                $s = "SELECT distinct(courselist.cid) , courselist.ccode , courselist.cname FROM courselist, course WHERE courselist.cid = course.cid and course.personID=$id and courselist.type in('Theory')";
+                                $result = mysqli_query($con, $s);
+                                $num = mysqli_num_rows($result);
+
+                                while ($var = mysqli_fetch_assoc($result)) { ?><option value="<?php echo $var['cid'] ?>"><?php echo $var['ccode'] . '  [' . $var['cname'] . ']' ?></option>
+                                <?php
+                                }
+
+                                ?>
+                            </select>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label>Roll range</label>
+                            <input type="text" name="rollStart" class="form-control" required>
+                            <br>
+                            <input type="text" name="rollEnd" class="form-control" required>
+                        </div>
+
+
+                        <div>
+                            <label>select Exam type</label>
+                            <select class="form-control" name="ctno">
+                                <?php
+                                echo "<option value='5' >  Semester-Final part-A  </option>";
+                                echo "<option value='6' >  Semester-Final part-B  </option>";
+                                for ($i = 1; $i <= 4; $i++) {
+                                    echo "<option value='$i' >  CT-$i  </option>";
+                                }
+                                ?>
+                            </select>
+
+                        </div>
+
+                        <div>
+                            <label>Course Outcome</label>
+
+                            <table class="table table-striped table-bordered" ">
+            <tr>
+                <td>Course outcome </td>
+                <td>select </td>
+                <td>Total mark </td>
+            </tr>
+       
+       <?php
+            for ($i = 1; $i <= 5; $i++) { ?><tr>
+        <td style=" text-align: center;">CO<?php echo $i ?></td>
+                                <div class="checkbox">
+                                    <td style="text-align: center;"><input type="checkbox" class="largerCheckbox" value="CO<?php echo $i ?>" name="COS[]"></td>
+                                </div>
+
+                                <td style="text-align: center;"><input type="number" min="0" max="100" value="0" name="totalCO<?php echo $i ?>"></td>
+                                </tr>
+                            <?php
+                        }
+                            ?>
+                            </table>
+
+                        </div>
+
+
+
+
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-success" name="showCOmarkForm">NEXT</button>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+        <?php
+
+
+        } else {
+        ?>
+
+            <div class="d-flex justify-content-center">
+
+                <div class='list'>
+                    <div class="minibox">
+                        <h3>No Course are available</h3>
+
+                    </div>
+                    <div class="minibox">
+                        <div class="form-group">
+                            <form method='post'>
+                                <button type="submit" class="btn btn-success btn-block " name="addCourse">Add Course</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        <?php
+
+        }
+    }
+
+
+
+    if (isset($_POST["showCOmarkForm"])) {
+        echo '<script type="text/javascript">myFunction();</script>';
+
+        $rollStart = $_POST['rollStart'];
+        $rollEnd = $_POST['rollEnd'];
+        $course = $_POST['course'];
+        $ctno = $_POST['ctno'];
+        $COS = $_POST['COS'];
+
+        $coTotalMark[] = "";
+
+
+        for ($i = 0; $i < sizeof($COS); $i++) {
+            $coTotalMark["$COS[$i]"] = $_POST["total$COS[$i]"];
+        }
+
+
+
+
+
+        $ds = "SELECT * From courselist WHERE cid=$course";
+        $dr = mysqli_query($con, $ds);
+        $dv = mysqli_fetch_assoc($dr);
+
+
+
+        ?>
+        <div class="d-flex justify-content-center">
+            <div class="list">
+                <div class="list">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <h5>
+                                    <p> Course Code </p>
+                                </h5>
+                            </div>
+                            <div class="col-sm-1">
+                                <h5>
+                                    <p>:</p>
+                                </h5>
+                            </div>
+                            <div class="col-sm-6">
+                                <h5>
+                                    <p> <?php echo $dv['ccode'] ?> </p>
+                                </h5>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <h5>
+                                    <p> Course Name </p>
+                                </h5>
+                            </div>
+                            <div class="col-sm-1">
+                                <h5>
+                                    <p>:</p>
+                                </h5>
+                            </div>
+                            <div class="col-sm-6">
+                                <h5>
+                                    <p> <?php echo $dv['cname'] ?> </p>
+                                </h5>
+
+                            </div>
+                        </div>
+                        <?php if ($ctno>='1'&& $ctno<='4') 
+                        { ?>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <h5>
+                                        <p> Class Test no. </p>
+                                    </h5>
+                                </div>
+                                <div class="col-sm-1">
+                                    <h5>
+                                        <p>:</p>
+                                    </h5>
+                                </div>
+                                <div class="col-sm-6">
+                                    <h5>
+                                        <p> <?php echo $ctno ?> </p>
+                                    </h5>
+
+                                </div>
+                            </div>
+
+                        <?php 
+                        } 
+                        else if($ctno=='5') 
+                        {
+                        ?>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h5>
+                                        <p> Semester-final part-A </p>
+                                    </h5>
+                                </div>
+                            </div>
+
+
+                        <?php
+                        }
+                         else if($ctno=='6') {
+                        ?>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h5>
+                                        <p> Semester-final part-B </p>
+                                    </h5>
+                                </div>
+                            </div>
+
+
+                        <?php
+                        }
+                        ?>
+                    </div>
+                </div>
+
+
+
+                <div class="d-flex justify-content-center">
+                    <form method='post'>
+                        <input type="hidden" name="rollStart" value="<?php echo $rollStart ?>">
+                        <input type="hidden" name="rollEnd" value="<?php echo $rollEnd ?>">
+                        <input type="hidden" name="course" value="<?php echo $course ?>">
+                        <input type="hidden" name="ctno" value="<?php echo $ctno ?>">
+
+                        <?php
+                        for ($i = 0; $i < sizeof($COS); $i++) {
+                        ?>
+                            <input type="hidden" name="COS[]" value="<?php echo $COS[$i] ?>">
+                        <?php
+
+                        }
+                        for ($i = 0; $i < sizeof($COS); $i++) {
+                        ?>
+                            <input type="hidden" name="total<?php echo $COS[$i] ?>" value="<?php echo $coTotalMark["$COS[$i]"] ?>">
+                        <?php
+                        }
+
+                        ?>
+
+
+
+                        <table class="table table-striped table-bordered" style="max-width: 500px;">
+                            <tr>
+                                <td>
+                                    <h5>student Roll</h5>
+                                </td>
+                                <?php
+                                for ($i = 0; $i < sizeof($COS); $i++) {
+                                    $coid = $COS[$i];
+                                    echo "<td><h5>$COS[$i]<br>$coTotalMark[$coid]</h5></td>";
+                                }
+                                ?>
+                            </tr>
+
+                            <?php
+                            $datatable = 'marks';
+                            for ($i = $rollStart; $i <= $rollEnd; $i++) {
+
+        
+
+                            ?>
+
+                                <tr>
+                                    <td><?php echo $i ?></td>
+        
+
+
+                                    <?php
+
+                                    for ($j = 0; $j < sizeof($COS); $j++) {
+
+                                        $s = "select * from co where no='$ctno' && cid='$course' && roll='$i' && cono='$COS[$j]' ORDER BY id DESC";
+                                        $result = mysqli_query($con, $s);
+                                        $num = mysqli_num_rows($result);
+
+                                        $value;
+                                        if ($num == 0) {
+                                            $value = '';
+                                        } else {
+                                            $var = mysqli_fetch_assoc($result);
+                                            $value = $var['mark'];
+                                        }
+                                        $coid = $COS[$j];
+
+                                    ?>
+                                        <td style="text-align: center;"><input type="number" min="0" max="<?php echo $coTotalMark[$coid] ?>" value="<?php echo $value ?>" name="<?php echo "$i$COS[$j]" ?>"></td>
+
+
+                                    <?php
+
+                                    }
+
+
+                                    ?>
+                                </tr><?php
+
+
+                                    }
+
+                                        ?>
+                        </table>
+
+                        <button type="submit" class="btn btn-success  btn-block" name="takeCOmarksDone">DONE</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    <?php
+
+
+    }
+
+
+    if (isset($_POST["takeCOmarksDone"])) {
+        echo '<script type="text/javascript">myFunction();</script>';
+        global $name;
+        global $con;
+
+        $rollStart = $_POST['rollStart'];
+
+        $rollEnd = $_POST['rollEnd'];
+        $course = $_POST['course'];
+        $ctno = $_POST['ctno'];
+        $COS = $_POST['COS'];
+
+        $coTotalMark[] = '';
+
+
+        for ($i = 0; $i < sizeof($COS); $i++) {
+            $coTotalMark["$COS[$i]"] = $_POST["total$COS[$i]"];
+            echo $coTotalMark["$COS[$i]"];
+        }
+
+
+
+        
+
+        for ($i = $rollStart; $i <= $rollEnd; $i++) {
+
+
+            for ($j = 0; $j < sizeof($COS); $j++) {
+
+                $x = $_POST["$i$COS[$j]"];
+                if ($x == "") {
+                    $x = 'A';
+                }
+                $coid = $COS[$j];
+
+
+                $s = "select * from co where no='$ctno' && cid='$course' && roll='$i' && cono='$COS[$j]' ORDER BY id DESC";
+                $result = mysqli_query($con, $s);
+                $num = mysqli_num_rows($result);
+
+                if ($num == 0) {
+                    $query = "INSERT INTO co VALUES('','$i','$course','$ctno','$COS[$j]','$x','$coTotalMark[$coid]') ";
+
+
+                    mysqli_query($con, $query);
+                } else {
+                    $var = mysqli_fetch_assoc($result);
+                    $newID = $var['id'];
+
+                    $query = "UPDATE co  SET mark='$x' ,fullmark='$coTotalMark[$coid]' WHERE id=$newID";
+
+                    mysqli_query($con, $query);
+                }
+            }
+        }
+
+
+    ?>
+        <div class="d-flex justify-content-center">
+            <div class="list">
+                <h3>Data Store successfully</h3>
+            </div>
+        </div>
+        <?php
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
     //_____________CO_____________
 
     if (isset($_POST["co"])) {
@@ -370,7 +802,7 @@ if ($type != "Teacher") {
         $num = mysqli_num_rows($result);
         if ($num != 0) {
 
-    ?>
+        ?>
 
             <div class="d-flex justify-content-center">
                 <div class="list">
@@ -751,12 +1183,14 @@ if ($type != "Teacher") {
 
                         ?>
                             <tr>
-                                <td>CO<?php echo $j ?></td><td><?php echo $totalco[$j] ?>%
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $totalco[$j] ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $totalco[$j] ?>%">
+                                <td>CO<?php echo $j ?></td>
+                                <td><?php echo $totalco[$j] ?>%
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $totalco[$j] ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $totalco[$j] ?>%">
+                                        </div>
                                     </div>
-                                </div></td>
-                                
+                                </td>
+
                             </tr>
 
                         <?php
@@ -1646,32 +2080,6 @@ if ($type != "Teacher") {
                             <input type="text" name="rollEnd" class="form-control" required>
                         </div>
 
-
-                        <div>
-                            <label>Course Outcome</label>
-
-                            <table class="table table-striped table-bordered" ">
-                    <tr>
-                        <td>Course outcome </td>
-                        <td>Total mark </td>
-                    </tr>
-               
-               <?php
-                    for ($i = 1; $i <= 5; $i++) { ?><tr>
-                <td style=" text-align: center;">CO<?php echo $i ?></td>
-
-
-                                <td style="text-align: center;"><input type="number" min="0" max="100" value="0" name="totalCO<?php echo $i ?>"></td>
-                                </tr>
-                            <?php
-                        }
-                            ?>
-                            </table>
-
-                        </div>
-
-
-
                         <div class="d-flex justify-content-end">
 
                             <button type="submit" class="btn btn-success" name="getfinalmark">NEXT</button>
@@ -1722,9 +2130,6 @@ if ($type != "Teacher") {
                 $dr = mysqli_query($con, $ds);
                 $dv = mysqli_fetch_assoc($dr);
 
-                for ($i = 1; $i <= 5; $i++) {
-                    $coTotalMark[$i] = $_POST["totalCO$i"];
-                }
 
 
 
@@ -1784,13 +2189,6 @@ if ($type != "Teacher") {
                     <input type="hidden" name="rollEnd" value="<?php echo $rollEnd ?>">
                     <input type="hidden" name="course" value="<?php echo $course ?>">
 
-                    <?php
-                    for ($i = 1; $i <= 5; $i++) {
-                    ?> <input type="hidden" name="<?php echo "totalCO$i" ?>" value="<?php echo $coTotalMark[$i] ?>">
-                    <?php
-                    }
-
-                    ?>
 
 
                     <table class="table table-striped table-bordered" style="max-width: 500px;">
@@ -1798,14 +2196,7 @@ if ($type != "Teacher") {
                             <td>Roll</td>
                             <td>Part-A</td>
                             <td>Part-B</td>
-                            <td></td>
-                            <td></td>
-
-                            <?php
-                            for ($i = 1; $i <= 5; $i++) {
-                                echo "<td>CO$i<br>($coTotalMark[$i])</td>";
-                            }
-                            ?>
+                        
                         </tr>
 
                         <?php
@@ -1835,35 +2226,6 @@ if ($type != "Teacher") {
                                 <td style="text-align: center;"><input type="number" min="0" max="36" value="<?php echo $valueA ?>" name="A<?php echo $i ?>"></td>
                                 <td style="text-align: center;"><input type="number" min="0" max="36" value="<?php echo $valueB ?>" name="B<?php echo $i ?>"></td>
 
-                                <td></td>
-                                <td></td>
-                                <?php
-
-
-                                for ($j = 1; $j <= 5; $j++) {
-
-                                    $s = "select * from co where no='0' && cid='$course' && roll='$i' && cono='CO$j' ORDER BY id DESC";
-                                    $result = mysqli_query($con, $s);
-                                    $num = mysqli_num_rows($result);
-
-                                    $value;
-                                    if ($num == 0) {
-                                        $value = '';
-                                    } else {
-                                        $var = mysqli_fetch_assoc($result);
-                                        $value = $var['mark'];
-                                    }
-
-                                ?>
-                                    <td style="text-align: center;"><input type="number" min="0" max="<?php echo $coTotalMark[$j] ?>" value="<?php echo $value ?>" name="<?php echo $i ?>CO<?php echo $j ?>"></td>
-
-
-                                <?php
-
-                                }
-
-
-                                ?>
                             </tr><?php
 
                                 }
@@ -1901,10 +2263,6 @@ if ($type != "Teacher") {
 
                 $datatable = "finalmark";
 
-                for ($i = 1; $i <= 5; $i++) {
-                    $coTotalMark[$i] = $_POST["totalCO" . $i];
-                }
-
                 for ($i = $rollStart; $i <= $rollEnd; $i++) {
 
                     $xA = $_POST['A' . $i];
@@ -1929,32 +2287,6 @@ if ($type != "Teacher") {
                     }
 
 
-                    for ($j = 1; $j <= 5; $j++) {
-
-                        $x = $_POST[$i . "CO" . $j];
-                        if ($x == "") {
-                            $x = 'A';
-                        }
-
-
-                        $s = "select * from co where no='0' && cid='$course' && roll='$i' && cono='CO$j' ORDER BY id DESC";
-                        $result = mysqli_query($con, $s);
-                        $num = mysqli_num_rows($result);
-
-                        if ($num == 0) {
-                            $query = "INSERT INTO co VALUES('','$i','$course','0','CO$j','$x','$coTotalMark[$j]') ";
-
-
-                            mysqli_query($con, $query);
-                        } else {
-                            $var = mysqli_fetch_assoc($result);
-                            $newID = $var['id'];
-
-                            $query = "UPDATE co  SET mark='$x' ,fullmark='$coTotalMark[$j]' WHERE id=$newID";
-
-                            mysqli_query($con, $query);
-                        }
-                    }
                 }
 
 
