@@ -458,10 +458,142 @@ if ($type != "Teacher") {
         <div class="d-flex justify-content-center">
             <div class="list">
                 <div class="d-flex justify-content-end">
+                    <form method='post'>
+                        <input type="hidden" name="rollStart" value="<?php echo $rollStart ?>">
+                        <input type="hidden" name="rollEnd" value="<?php echo $rollEnd ?>">
+                        <input type="hidden" name="course" value="<?php echo $course ?>">
+                        <button type="submit" class="btn btn-success btn-block " name="COmoredetails">more details</button>
+                    </form>
+                </div>
+                <div class="d-flex justify-content-end">
 
 
                     <!--<a target="_blank" href="generatePDF.php?id=<?= $row['id'] ?>" class="btn  btn-success"> <i class="fa fa-file-pdf-o"></i>Print</a>
                 -->
+
+
+                </div>
+
+                <h3 style="text-align: center;">Course Outcome</h3>
+                <h5 style="text-align: center;">Course Code : <?php echo $dv['ccode'] ?></h5>
+                <h5 style="text-align: center;">Course Name : <?php echo $dv['cname'] ?></h5>
+                <table class="table table-striped table-bordered" style="text-align: center;">
+                    <tr>
+                        <td>
+                            <h5>Roll</h5>
+
+                        </td>
+                        <td>
+                            <h5>CO performance (%)</h5>
+                        </td>
+                    </tr>
+
+                    <?php
+                    $totalper = 0;
+                    for ($i = $rollStart; $i <= $rollEnd; $i++) {
+                        echo "<tr>";
+                        echo "<td>$i</td>";
+
+                        $s = "select sum(mark) as mark from co where cid='$course' && roll='$i' ";
+                        $result = mysqli_query($con, $s);
+                        $dvv = mysqli_fetch_assoc($result);
+                        $mark = $dvv['mark'];
+                        $s = "select sum(fullmark) as mark from co where cid='$course' && roll='$i' ";
+                        $result = mysqli_query($con, $s);
+                        $dvv = mysqli_fetch_assoc($result);
+                        $fullmark = $dvv['mark'];
+                        if ($fullmark == 0) {
+                            $per = '0';
+                        } else {
+                            $per = ($mark * 100) / $fullmark;
+                        }
+                        $totalper += $per;
+
+                        $per = round($per, 2);
+
+
+
+
+
+
+                    ?>
+
+
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $per ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $per ?>%">
+                                </div>
+                            </div>
+                            <?php echo "<td>$per%</td>"; ?>
+                        </td>
+
+
+                        </tr>
+                    <?php
+
+
+
+                    }
+
+
+
+
+                    ?>
+                </table>
+                <div class="list">
+                    <?php $totalper = round($totalper, 2);
+                    $totalper /= ($rollEnd - $rollStart + 1);
+                    $totalper = round($totalper, 2);
+
+                    ?>
+                    <h3>Avg. performance of all is <?php echo $totalper ?>%</h3>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $totalper ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $totalper ?>%">
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+
+
+        </div><?php
+
+
+
+
+
+
+
+            }
+
+
+            if (isset($_POST["COmoredetails"])) {
+                echo '<script type="text/javascript">myFunction();</script>';
+
+                $rollStart = $_POST['rollStart'];
+                $rollEnd = $_POST['rollEnd'];
+                $course = $_POST['course'];
+
+                $ds = "SELECT * From courselist WHERE cid=$course";
+                $dr = mysqli_query($con, $ds);
+                $dv = mysqli_fetch_assoc($dr);
+
+                $datatable = 'marks';
+                ?>
+        <div class="d-flex justify-content-center">
+            <div class="list">
+                <div class="d-flex justify-content-end">
+
+                </div>
+                <div class="d-flex justify-content-end">
+
+
+                    <!--<a target="_blank" href="generatePDF.php?id=<?= $row['id'] ?>" class="btn  btn-success"> <i class="fa fa-file-pdf-o"></i>Print</a>
+                        -->
 
 
                 </div>
@@ -480,11 +612,31 @@ if ($type != "Teacher") {
                             <h5>CO performance %</h5>
                         </td>
                         <td>
-                            <h5>performance bar</h5>
+                            <h5>CO-1</h5>
+                        </td>
+                        <td>
+                            <h5>CO-2</h5>
+                        </td>
+                        <td>
+                            <h5>CO-3</h5>
+                        </td>
+                        <td>
+                            <h5>CO-4</h5>
+                        </td>
+                        <td>
+                            <h5>CO-5</h5>
                         </td>
                     </tr>
 
                     <?php
+                    $totalper = 0;
+
+
+                    $totalco[1] = 0;
+                    $totalco[2] = 0;
+                    $totalco[3] = 0;
+                    $totalco[4] = 0;
+                    $totalco[5] = 0;
                     for ($i = $rollStart; $i <= $rollEnd; $i++) {
                         echo "<tr>";
                         echo "<td>$i</td>";
@@ -497,30 +649,70 @@ if ($type != "Teacher") {
                         $result = mysqli_query($con, $s);
                         $dvv = mysqli_fetch_assoc($result);
                         $fullmark = $dvv['mark'];
-                        if ($fullmark == '0') {
+                        if ($fullmark == 0) {
                             $per = '0';
                         } else {
                             $per = ($mark * 100) / $fullmark;
                         }
+                        $totalper += $per;
 
                         $per = round($per, 2);
 
 
+                    ?>
 
-                        echo "<td>$per</td>"; 
-                        
-                        
-                        ?>
-                        
 
-                           <td> <div class="progress">
+                        <td>
+                            <div class="progress">
                                 <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $per ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $per ?>%">
                                 </div>
                             </div>
-                            
-                        
+                            <?php echo "$per%"; ?>
+                        </td>
+                        <?php
 
-                    </tr>
+
+
+
+                        for ($j = 1; $j <= 5; $j++) {
+                            $xyz = "CO" . $j;
+                            $s = "select sum(mark) as mark from co where cono='$xyz' && cid='$course' && roll='$i' ";
+                            $result = mysqli_query($con, $s);
+                            $dvv = mysqli_fetch_assoc($result);
+                            $mark = $dvv['mark'];
+
+                            $s = "select sum(fullmark) as mark from co where cono='$xyz' && cid='$course' && roll='$i' ";
+                            $result = mysqli_query($con, $s);
+                            $dvv = mysqli_fetch_assoc($result);
+                            $fullmark = $dvv['mark'];
+                            if ($fullmark == 0) {
+                                $perr = '0';
+                            } else {
+                                $perr = ($mark * 100) / $fullmark;
+                            }
+
+
+                            $perr = round($perr, 2);
+                            $totalco[$j] += $perr;
+
+                        ?>
+
+
+                            <td>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $perr ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $perr ?>%">
+                                    </div>
+                                </div>
+                                <?php echo "$perr%"; ?>
+                            </td>
+                        <?php
+
+                        }
+
+
+
+                        ?>
+                        </tr>
                     <?php
 
 
@@ -532,8 +724,58 @@ if ($type != "Teacher") {
 
                     ?>
                 </table>
+                <div class="list">
+                    <?php $totalper = round($totalper, 2);
+                    $totalper /= ($rollEnd - $rollStart + 1);
+                    $totalper = round($totalper, 2);
+
+                    ?>
+                    <h3>Total Avg. performance of all is <?php echo $totalper ?>%</h3>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $totalper ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $totalper ?>%">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="list">
+                    <h3>Avg. performance of </h3>
+                    <table class="table table-striped table-bordered" style="text-align: center;">
+
+                        <?php
+
+                        for ($j = 1; $j <= 5; $j++) {
+                            $totalco[$j] = round($totalco[$j], 2);
+                            $totalco[$j] /= ($rollEnd - $rollStart + 1);
+                            $totalco[$j] = round($totalco[$j], 2);
+
+                        ?>
+                            <tr>
+                                <td>CO<?php echo $j ?></td><td><?php echo $totalco[$j] ?>%
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $totalco[$j] ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $totalco[$j] ?>%">
+                                    </div>
+                                </div></td>
+                                
+                            </tr>
+
+                        <?php
+
+
+                        }
+
+                        ?>
+                    </table>
+
+
+                </div>
 
             </div>
+
+
+
+
+
         </div><?php
 
 
@@ -637,6 +879,18 @@ if ($type != "Teacher") {
 
                 }
             }
+
+
+
+
+
+
+
+
+
+
+
+
             if (isset($_POST["getLabmark"])) {
 
                 echo '<script type="text/javascript">myFunction();</script>';
