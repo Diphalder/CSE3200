@@ -556,8 +556,7 @@ if ($type != "Teacher") {
 
                             </div>
                         </div>
-                        <?php if ($ctno>='1'&& $ctno<='4') 
-                        { ?>
+                        <?php if ($ctno >= '1' && $ctno <= '4') { ?>
                             <div class="row">
                                 <div class="col-sm-5">
                                     <h5>
@@ -577,10 +576,8 @@ if ($type != "Teacher") {
                                 </div>
                             </div>
 
-                        <?php 
-                        } 
-                        else if($ctno=='5') 
-                        {
+                        <?php
+                        } else if ($ctno == '5') {
                         ?>
 
                             <div class="row">
@@ -593,8 +590,7 @@ if ($type != "Teacher") {
 
 
                         <?php
-                        }
-                         else if($ctno=='6') {
+                        } else if ($ctno == '6') {
                         ?>
 
                             <div class="row">
@@ -655,13 +651,13 @@ if ($type != "Teacher") {
                             $datatable = 'marks';
                             for ($i = $rollStart; $i <= $rollEnd; $i++) {
 
-        
+
 
                             ?>
 
                                 <tr>
                                     <td><?php echo $i ?></td>
-        
+
 
 
                                     <?php
@@ -734,7 +730,7 @@ if ($type != "Teacher") {
 
 
 
-        
+
 
         for ($i = $rollStart; $i <= $rollEnd; $i++) {
 
@@ -2196,7 +2192,7 @@ if ($type != "Teacher") {
                             <td>Roll</td>
                             <td>Part-A</td>
                             <td>Part-B</td>
-                        
+
                         </tr>
 
                         <?php
@@ -2285,8 +2281,6 @@ if ($type != "Teacher") {
 
                         mysqli_query($con, $query);
                     }
-
-
                 }
 
 
