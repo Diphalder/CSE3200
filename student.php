@@ -988,7 +988,7 @@ if (isset($_POST["addroll"])) {
             <div class='container'>
                 <div class="d-flex justify-content-center">
                     <div class="list">
-                        
+
 
                         <div class="d-flex justify-content-center">
                             <div class="list">
@@ -1008,6 +1008,8 @@ if (isset($_POST["addroll"])) {
                         <td>
                             <h5>avg CO</h5>
                         </td>
+                        <td></td>
+                        <td></td>
                        
                         <td>
                             <h5>CO-1</h5>
@@ -1029,33 +1031,33 @@ if (isset($_POST["addroll"])) {
             </tr>
 
     <?php
-            $totalper = 0;
 
 
+            $totalco[0] = 0;
             $totalco[1] = 0;
-            $totalco[2] = 0;
-            $totalco[3] = 0;
-            $totalco[4] = 0;
-            $totalco[5] = 0;
+
+
+
             for ($i = 0; $i < $number; $i++) {
                 echo "<tr>";
                 echo "<td>$course[$i]</td>";
 
 
-                $s = "select sum(mark) as mark from co where cid='$ $cid[$i]' && roll='$roll' ";
+                $s = "select sum(mark) as mark from co where cid='$cid[$i]' && roll='$roll' ";
                 $result = mysqli_query($con, $s);
                 $dvv = mysqli_fetch_assoc($result);
                 $mark = $dvv['mark'];
-                $s = "select sum(fullmark) as mark from co where cid=' $cid[$i]' && roll='$roll' ";
+                $s = "select sum(fullmark) as mark from co where cid='$cid[$i]' && roll='$roll' ";
                 $result = mysqli_query($con, $s);
                 $dvv = mysqli_fetch_assoc($result);
                 $fullmark = $dvv['mark'];
+
                 if ($fullmark == 0) {
                     $per = '0';
                 } else {
                     $per = ($mark * 100) / $fullmark;
                 }
-                $totalper += $per;
+
 
                 $per = round($per, 2);
 
@@ -1070,6 +1072,9 @@ if (isset($_POST["addroll"])) {
                             </div>
                             <?php echo "$per%"; ?>
                             </td>
+                            <td></td>
+                            <td></td>
+
                             <?php
 
 
@@ -1090,11 +1095,12 @@ if (isset($_POST["addroll"])) {
                                     $perr = '0';
                                 } else {
                                     $perr = ($mark * 100) / $fullmark;
+                                    $totalco[0] += $mark;
+                                    $totalco[1] += $fullmark;
                                 }
 
-
                                 $perr = round($perr, 2);
-                                $totalco[$j] += $perr;
+
 
                             ?>
 
@@ -1108,7 +1114,7 @@ if (isset($_POST["addroll"])) {
                                 </td>
                             <?php
 
-                            
+
                             }
 
 
@@ -1122,8 +1128,15 @@ if (isset($_POST["addroll"])) {
                         ?>
                         </table>
                         <div class="list">
-                            <?php $totalper = round($totalper, 2);
-                            $totalper /= ($number);
+                            <?php
+
+                            if ($totalco[1] == 0) {
+                                $totalper = '0';
+                            } else {
+                                $totalper = ($totalco[0] * 100) /  $totalco[1];
+                            }
+
+
                             $totalper = round($totalper, 2);
 
                             ?>
@@ -1142,16 +1155,42 @@ if (isset($_POST["addroll"])) {
                                 <?php
 
                                 for ($j = 1; $j <= 5; $j++) {
-                                    $totalco[$j] = round($totalco[$j], 2);
-                                    $totalco[$j] /= ($number);
-                                    $totalco[$j] = round($totalco[$j], 2);
+                                    $totalco[0] = 0;
+                                    $totalco[1] = 0;
+
+                                    for ($i = 0; $i < $number; $i++) {
+                                        $xyz = "CO" . $j;
+                                        $s = "select sum(mark) as mark from co where cono='$xyz' && cid='$cid[$i]' && roll='$roll' ";
+                                        $result = mysqli_query($con, $s);
+                                        $dvv = mysqli_fetch_assoc($result);
+                                        $mark = $dvv['mark'];
+
+                                        $s = "select sum(fullmark) as mark from co where cono='$xyz' && cid='$cid[$i]' && roll='$roll' ";
+                                        $result = mysqli_query($con, $s);
+                                        $dvv = mysqli_fetch_assoc($result);
+                                        $fullmark = $dvv['mark'];
+                                        if ($fullmark == 0) {
+                                        } else {
+
+                                            $totalco[0] += $mark;
+                                            $totalco[1] += $fullmark;
+                                        }
+                                    }
+
+                                    if ($totalco[1] == 0) {
+                                        $tper = '0';
+                                    } else {
+                                        $tper = ($totalco[0] * 100) /  $totalco[1];
+                                    }
+
+                                    $tper = round($tper, 2);
 
                                 ?>
                                     <tr>
                                         <td>CO<?php echo $j ?></td>
-                                        <td><?php echo $totalco[$j] ?>%
+                                        <td><?php echo $tper ?>%
                                             <div class="progress">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $totalco[$j] ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $totalco[$j] ?>%">
+                                                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $tper ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $tper ?>%">
                                                 </div>
                                             </div>
                                         </td>
