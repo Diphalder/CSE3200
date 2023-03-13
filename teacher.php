@@ -3305,34 +3305,7 @@ if ($type != "Teacher") {
 
                             </div>
 
-                            <div>
-                                <label>Course Outcome</label>
-
-                                <table class="table table-striped table-bordered" ">
-                    <tr>
-                        <td>Course outcome </td>
-                        <td>select </td>
-                        <td>Total mark </td>
-                    </tr>
-               
-               <?php
-                    for ($i = 1; $i <= 5; $i++) { ?><tr>
-                <td style=" text-align: center;">CO<?php echo $i ?></td>
-                                    <div class="checkbox">
-                                        <td style="text-align: center;"><input type="checkbox" class="largerCheckbox" value="CO<?php echo $i ?>" name="COS[]"></td>
-                                    </div>
-
-                                    <td style="text-align: center;"><input type="number" min="0" max="20" value="0" name="totalCO<?php echo $i ?>"></td>
-                                    </tr>
-                                <?php
-                            }
-                                ?>
-                                </table>
-
-                            </div>
-
-
-
+                            
 
                             <div class="d-flex justify-content-end">
                                 <button type="submit" class="btn btn-success" name="showCTmarkForm">NEXT</button>
@@ -3379,14 +3352,7 @@ if ($type != "Teacher") {
                 $rollEnd = $_POST['rollEnd'];
                 $course = $_POST['course'];
                 $ctno = $_POST['ctno'];
-                $COS = $_POST['COS'];
-
-                $coTotalMark[] = "";
-
-
-                for ($i = 0; $i < sizeof($COS); $i++) {
-                    $coTotalMark["$COS[$i]"] = $_POST["total$COS[$i]"];
-                }
+            
 
 
 
@@ -3470,17 +3436,7 @@ if ($type != "Teacher") {
                             <input type="hidden" name="ctno" value="<?php echo $ctno ?>">
 
                             <?php
-                            for ($i = 0; $i < sizeof($COS); $i++) {
-                            ?>
-                                <input type="hidden" name="COS[]" value="<?php echo $COS[$i] ?>">
-                            <?php
-
-                            }
-                            for ($i = 0; $i < sizeof($COS); $i++) {
-                            ?>
-                                <input type="hidden" name="total<?php echo $COS[$i] ?>" value="<?php echo $coTotalMark["$COS[$i]"] ?>">
-                            <?php
-                            }
+                
 
                             ?>
 
@@ -3494,12 +3450,7 @@ if ($type != "Teacher") {
                                     <td>
                                         <h5>Class-Test Marks <br>(20)</h5>
                                     </td>
-                                    <?php
-                                    for ($i = 0; $i < sizeof($COS); $i++) {
-                                        $coid = $COS[$i];
-                                        echo "<td><h5>$COS[$i]<br>$coTotalMark[$coid]</h5></td>";
-                                    }
-                                    ?>
+                                   
                                 </tr>
 
                                 <?php
@@ -3528,28 +3479,6 @@ if ($type != "Teacher") {
 
                                         <?php
 
-                                        for ($j = 0; $j < sizeof($COS); $j++) {
-
-                                            $s = "select * from co where no='$ctno' && cid='$course' && roll='$i' && cono='$COS[$j]' ORDER BY id DESC";
-                                            $result = mysqli_query($con, $s);
-                                            $num = mysqli_num_rows($result);
-
-                                            $value;
-                                            if ($num == 0) {
-                                                $value = '';
-                                            } else {
-                                                $var = mysqli_fetch_assoc($result);
-                                                $value = $var['mark'];
-                                            }
-                                            $coid = $COS[$j];
-
-                                        ?>
-                                            <td style="text-align: center;"><input type="number" min="0" max="<?php echo $coTotalMark[$coid] ?>" value="<?php echo $value ?>" name="<?php echo "$i$COS[$j]" ?>"></td>
-
-
-                                        <?php
-
-                                        }
 
 
                                         ?>
@@ -3584,16 +3513,9 @@ if ($type != "Teacher") {
                 $rollEnd = $_POST['rollEnd'];
                 $course = $_POST['course'];
                 $ctno = $_POST['ctno'];
-                $COS = $_POST['COS'];
+              
 
-                $coTotalMark[] = '';
-
-
-                for ($i = 0; $i < sizeof($COS); $i++) {
-                    $coTotalMark["$COS[$i]"] = $_POST["total$COS[$i]"];
-                    echo $coTotalMark["$COS[$i]"];
-                }
-
+               
 
 
                 $datatable = "marks";
@@ -3622,33 +3544,6 @@ if ($type != "Teacher") {
                         mysqli_query($con, $query);
                     }
 
-                    for ($j = 0; $j < sizeof($COS); $j++) {
-
-                        $x = $_POST["$i$COS[$j]"];
-                        if ($x == "") {
-                            $x = 'A';
-                        }
-                        $coid = $COS[$j];
-
-
-                        $s = "select * from co where no='$ctno' && cid='$course' && roll='$i' && cono='$COS[$j]' ORDER BY id DESC";
-                        $result = mysqli_query($con, $s);
-                        $num = mysqli_num_rows($result);
-
-                        if ($num == 0) {
-                            $query = "INSERT INTO co VALUES('','$i','$course','$ctno','$COS[$j]','$x','$coTotalMark[$coid]') ";
-
-
-                            mysqli_query($con, $query);
-                        } else {
-                            $var = mysqli_fetch_assoc($result);
-                            $newID = $var['id'];
-
-                            $query = "UPDATE co  SET mark='$x' ,fullmark='$coTotalMark[$coid]' WHERE id=$newID";
-
-                            mysqli_query($con, $query);
-                        }
-                    }
                 }
 
 

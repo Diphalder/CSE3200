@@ -1,23 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Bootstrap Example</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
-<body>
+<?php
+// Example data
+$data = array(10, 20, 30, 40, 50);
 
-<div class="container">
-  <h2>Basic Progress Bar</h2>
-  <div class="progress">
-    <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:70%">
-      <span class="sr-only">70% Complete</span>
-    </div>
-  </div>
-</div>
+// Set up the HTML canvas
+echo '<canvas id="myChart"></canvas>';
 
-</body>
-</html>
+// Generate the JavaScript code to render the chart
+echo '<script>';
+echo 'var ctx = document.getElementById("myChart").getContext("2d");';
+echo 'var myChart = new Chart(ctx, {';
+echo 'type: "bar",';
+echo 'data: {';
+echo 'labels: ["Label 1", "Label 2", "Label 3", "Label 4", "Label 5"],';
+echo 'datasets: [{';
+echo 'label: "Data",';
+echo 'data: ['.implode(',', $data).'],';
+echo 'backgroundColor: "rgba(255, 99, 132, 0.2)",';
+echo 'borderColor: "rgba(255, 99, 132, 1)",';
+echo 'borderWidth: 1';
+echo '}]';
+echo '},';
+echo 'options: {';
+echo 'scales: {';
+echo 'yAxes: [{';
+echo 'ticks: {';
+echo 'beginAtZero: true';
+echo '}';
+echo '}]';
+echo '}';
+echo '}';
+echo '});';
+echo '</script>';
+?>
+
+<!-- Add any other HTML content you want to display on the website here -->
+<p>This is my website.</p>
