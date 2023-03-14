@@ -1,37 +1,43 @@
-<?php
-// Example data
-$data = array(10, 20, 30, 40, 50);
-
-// Set up the HTML canvas
-echo '<canvas id="myChart"></canvas>';
-
-// Generate the JavaScript code to render the chart
-echo '<script>';
-echo 'var ctx = document.getElementById("myChart").getContext("2d");';
-echo 'var myChart = new Chart(ctx, {';
-echo 'type: "bar",';
-echo 'data: {';
-echo 'labels: ["Label 1", "Label 2", "Label 3", "Label 4", "Label 5"],';
-echo 'datasets: [{';
-echo 'label: "Data",';
-echo 'data: ['.implode(',', $data).'],';
-echo 'backgroundColor: "rgba(255, 99, 132, 0.2)",';
-echo 'borderColor: "rgba(255, 99, 132, 1)",';
-echo 'borderWidth: 1';
-echo '}]';
-echo '},';
-echo 'options: {';
-echo 'scales: {';
-echo 'yAxes: [{';
-echo 'ticks: {';
-echo 'beginAtZero: true';
-echo '}';
-echo '}]';
-echo '}';
-echo '}';
-echo '});';
-echo '</script>';
-?>
-
-<!-- Add any other HTML content you want to display on the website here -->
-<p>This is my website.</p>
+<?php  
+ $connect = mysqli_connect("localhost", "root", "", "testing");  
+ $query = "SELECT gender, count(*) as number FROM tbl_employee GROUP BY gender";  
+ $result = mysqli_query($connect, $query);  
+ ?>  
+ <!DOCTYPE html>  
+ <html>  
+      <head>  
+           <title>Webslesson Tutorial | Make Simple Pie Chart by Google Chart API with PHP Mysql</title>  
+           <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>  
+           <script type="text/javascript">  
+           google.charts.load('current', {'packages':['corechart']});  
+           google.charts.setOnLoadCallback(drawChart);  
+           function drawChart()  
+           {  
+                var data = google.visualization.arrayToDataTable([  
+                          ['Gender', 'Number'],  
+                          <?php  
+                          while($row = mysqli_fetch_array($result))  
+                          {  
+                               echo "['".$row["gender"]."', ".$row["number"]."],";  
+                          }  
+                          ?>  
+                     ]);  
+                var options = {  
+                      title: 'Percentage of Male and Female Employee',  
+                      //is3D:true,  
+                      pieHole: 0.4  
+                     };  
+                var chart = new google.visualization.PieChart(document.getElementById('piechart'));  
+                chart.draw(data, options);  
+           }  
+           </script>  
+      </head>  
+      <body>  
+           <br /><br />  
+           <div style="width:900px;">  
+                <h3 align="center">Make Simple Pie Chart by Google Chart API with PHP Mysql</h3>  
+                <br />  
+                <div id="piechart" style="width: 900px; height: 500px;"></div>  
+           </div>  
+      </body>  
+ </html> 

@@ -1153,6 +1153,9 @@ if (isset($_POST["addroll"])) {
                             <table class="table table-striped table-bordered" style="text-align: center;">
 
                                 <?php
+                                $zzzz[]="";
+
+
 
                                 for ($j = 1; $j <= 5; $j++) {
                                     $totalco[0] = 0;
@@ -1184,6 +1187,7 @@ if (isset($_POST["addroll"])) {
                                     }
 
                                     $tper = round($tper, 2);
+                                    $zzzz[$j]=$tper;
 
                                 ?>
                                     <tr>
@@ -1208,6 +1212,44 @@ if (isset($_POST["addroll"])) {
                             </table>
 
                         </div>
+
+
+
+                        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                        <script type="text/javascript">
+                            google.charts.load('current', {
+                                'packages': ['corechart']
+                            });
+                            google.charts.setOnLoadCallback(drawChart);
+
+                            function drawChart() {
+                                var data = google.visualization.arrayToDataTable([
+                                    ['CO', 'Number'],
+                                    <?php
+                                    
+                                        echo "['" ."CO-1" . "', " . $zzzz[1] . "],";
+                                        echo "['" ."CO-2" . "', " . $zzzz[2] . "],";
+                                        echo "['" ."CO-3" . "', " . $zzzz[3] . "],";
+                                        echo "['" ."CO-4" . "', " . $zzzz[4] . "],";
+                                        echo "['" ."CO-5" . "', " . $zzzz[5] . "],";
+                                    
+                                    ?>
+                                ]);
+                                var options = {
+                                    title: 'Percentage of Course-outcome',
+                                    //is3D:true,  
+                                    pieHole: 0.4
+                                };
+                                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                                chart.draw(data, options);
+                            }
+                        </script>
+
+                        <div id="piechart" style="width: 900px; height: 500px;"></div>
+
+
+
+
 
                         </div>
 
