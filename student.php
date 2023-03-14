@@ -89,6 +89,8 @@ if (isset($_POST["addroll"])) {
 <html>
 
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         .largerCheckbox {
             width: 35px;
@@ -102,7 +104,7 @@ if (isset($_POST["addroll"])) {
 
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script>
         function myFunction() {
             var x = document.getElementById("profileid");
@@ -1149,11 +1151,11 @@ if (isset($_POST["addroll"])) {
                         </div>
 
                         <div class="list">
-                            <h3>Avg. performance of </h3>
+                        <!--<h3>Avg. performance of </h3> -->
                             <table class="table table-striped table-bordered" style="text-align: center;">
 
                                 <?php
-                                $zzzz[]="";
+                                $zzzz[] = "";
 
 
 
@@ -1187,19 +1189,20 @@ if (isset($_POST["addroll"])) {
                                     }
 
                                     $tper = round($tper, 2);
-                                    $zzzz[$j]=$tper;
+                                    $zzzz[$j] = $tper;
 
                                 ?>
-                                    <tr>
+                                    <!-- <tr>
                                         <td>CO<?php echo $j ?></td>
                                         <td><?php echo $tper ?>%
                                             <div class="progress">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $tper ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $tper ?>%">
-                                                </div>
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $tper ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $tper ?>%">
+                                     
+                                        </div>
                                             </div>
                                         </td>
 
-                                    </tr>
+                                    </tr> -->  
 
                                 <?php
 
@@ -1226,13 +1229,13 @@ if (isset($_POST["addroll"])) {
                                 var data = google.visualization.arrayToDataTable([
                                     ['CO', 'Number'],
                                     <?php
-                                    
-                                        echo "['" ."CO-1" . "', " . $zzzz[1] . "],";
-                                        echo "['" ."CO-2" . "', " . $zzzz[2] . "],";
-                                        echo "['" ."CO-3" . "', " . $zzzz[3] . "],";
-                                        echo "['" ."CO-4" . "', " . $zzzz[4] . "],";
-                                        echo "['" ."CO-5" . "', " . $zzzz[5] . "],";
-                                    
+
+                                    echo "['" . "CO-1" . "', " . $zzzz[1] . "],";
+                                    echo "['" . "CO-2" . "', " . $zzzz[2] . "],";
+                                    echo "['" . "CO-3" . "', " . $zzzz[3] . "],";
+                                    echo "['" . "CO-4" . "', " . $zzzz[4] . "],";
+                                    echo "['" . "CO-5" . "', " . $zzzz[5] . "],";
+
                                     ?>
                                 ]);
                                 var options = {
@@ -1246,6 +1249,76 @@ if (isset($_POST["addroll"])) {
                         </script>
 
                         <div id="piechart" style="width: 900px; height: 500px;"></div>
+
+
+
+                        <?php
+                    
+                            for ($j = 1; $j <= 5; $j++) {
+                                $cozz[]  = "CO".$j;
+                                $vall[] = $zzzz[$j];
+                            }
+                        
+
+
+                        ?>
+                       
+
+                        <head>
+                            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <title>Graph</title>
+                        </head>
+
+                        <body>
+                            <div class="list" >
+                                <h2 class="page-header"> Course Outcome result analysis </h2>
+                                <canvas id="chartjs_bar"></canvas>
+                            </div>
+                        </body>
+
+
+
+                        <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+                        <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+                        <script type="text/javascript">
+                            var ctx = document.getElementById("chartjs_bar").getContext('2d');
+                            var myChart = new Chart(ctx, {
+                                type: 'bar',
+                                data: {
+                                    labels: <?php echo json_encode($cozz); ?>,
+                                    datasets: [{
+                                        backgroundColor: [
+                                            "#5969ff",
+                                            "#ff407b",
+                                            "#25d5f2",
+                                            "#ffc750",
+                                            "#2ec551",
+                                            "#7040fa",
+                                            "#ff004e"
+                                        ],
+                                        data: <?php echo json_encode($vall); ?>,
+                                    }]
+                                },
+                                options: {
+                                    legend: {
+                                        display: true,
+                                        position: 'bottom',
+
+                                        labels: {
+                                            fontColor: '#71748d',
+                                            fontFamily: 'Circular Std Book',
+                                            fontSize: 14,
+                                        }
+                                    },
+
+
+                                }
+                            });
+                        </script>
+
+                        </html>
+
 
 
 
