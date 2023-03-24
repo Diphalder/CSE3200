@@ -341,6 +341,13 @@ if ($type != "Teacher") {
             </div>
 
 
+             <div class="btn-group">
+                <form method='post'>
+                    <button type="submit" class="btn btn-primary" name="codesign">CO design</button>
+                </form>
+            </div>
+
+
             <div class="btn-group">
                 <form method='post'>
                     <button type="submit" class="btn btn-primary" name="inputco">Input CO marks</button>
