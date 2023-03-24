@@ -341,7 +341,7 @@ if ($type != "Teacher") {
             </div>
 
 
-             <div class="btn-group">
+            <div class="btn-group">
                 <form method='post'>
                     <button type="submit" class="btn btn-primary" name="codesign">CO design</button>
                 </form>
@@ -372,6 +372,224 @@ if ($type != "Teacher") {
 
     <?php
 
+    // _________________course outcome design________________
+
+
+
+
+
+    if (isset($_POST["codesign"])) {
+
+        echo '<script type="text/javascript">myFunction();</script>';
+        global $id, $con;
+        $s = "SELECT distinct(courselist.cid) , courselist.ccode , courselist.cname FROM courselist, course WHERE courselist.cid = course.cid and course.personID=$id and courselist.type in('Theory','Lab')";
+        $result = mysqli_query($con, $s);
+        $num = mysqli_num_rows($result);
+
+
+
+
+        if ($num != 0) {
+
+    ?>
+            <div class="d-flex justify-content-center">
+                <div class="list">
+                    <form method='post'>
+                        <h2> Course outcome Design </h2>
+                        <div>
+                            <label>Course Code</label>
+                            <select class="form-control" name="course" required>
+                                <?php
+                                global $id, $con;
+                                $s = "SELECT distinct(courselist.cid) , courselist.ccode , courselist.cname FROM courselist, course WHERE courselist.cid = course.cid and course.personID=$id and courselist.type in('Theory','Lab')";
+                                $result = mysqli_query($con, $s);
+                                $num = mysqli_num_rows($result);
+
+                                while ($var = mysqli_fetch_assoc($result)) { ?><option value="<?php echo $var['cid'] ?>"><?php echo $var['ccode'] . '  [' . $var['cname'] . ']' ?></option>
+                                <?php
+                                }
+
+                                ?>
+                            </select>
+
+                        </div>
+
+
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-success" name="codesign2">NEXT</button>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+        <?php
+
+
+        } else {
+        ?>
+
+            <div class="d-flex justify-content-center">
+
+                <div class='list'>
+                    <div class="minibox">
+                        <h3>No Course are available</h3>
+
+                    </div>
+                    <div class="minibox">
+                        <div class="form-group">
+                            <form method='post'>
+                                <button type="submit" class="btn btn-success btn-block " name="addCourse">Add Course</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        <?php
+
+        }
+    }
+
+    if (isset($_POST["codesign2"])) {
+        echo '<script type="text/javascript">myFunction();</script>';
+        $cid = $_POST['course'];
+
+
+        ?>
+
+
+        <div class="d-flex justify-content-center">
+            <div class="list">
+
+                <div class="form-group" ">
+
+      <form  method='post'>
+
+      <input type="hidden" name="cid" value="<?php echo $cid ?>">
+                    <h3>Design CO[course outcome] Map PO [program outcome]</h3>
+                    <table class=" table table-striped ">
+                        <tr>
+                            <td>
+                                <h5>Course<br>outcome</h5>
+                            </td>
+                            <td>
+                                <h5>CO statement</h5>
+                            </td>
+                            <td>
+                                <h5>Program<br>outcome</h5>
+                            </td>
+                            <td>
+                                <h5>Content</h5>
+                            </td>
+                        </tr>
+
+                        <?php
+
+                        for ($i = 1; $i <= 5; $i++) {
+                            $s = "SELECT distinct(courselist.cid) , courselist.ccode , courselist.cname FROM courselist, course WHERE courselist.cid = course.cid and course.personID=$id and courselist.type in('Theory')";
+                            $result = mysqli_query($con, $s);
+                            $num = mysqli_num_rows($result);
+                            $var = mysqli_fetch_assoc($result);
+
+
+
+                            global $id, $con;
+                            $sss = "SELECT * from copo where personid='$id' and co='$i'";
+                            $rrr = mysqli_query($con, $sss);
+                            $nnn = mysqli_num_rows($rrr);
+                            $vvv = mysqli_fetch_assoc($rrr);
+
+
+                            $stmnt = "";
+                            $cnnt = "";
+                            if ($nnn != 0) {
+                                $stmnt = $vvv['statement'];
+                                $cnnt = $vvv['content'];
+                            }
+
+
+                        ?>
+                            <tr>
+                                <td>CO <?php echo $i ?> </td>
+
+                                <td>
+                                    <div class=" form-group">
+                                        <input type="text" size="50" name="costatement<?php echo $i ?>" class="form-control" value="<?php echo $stmnt ?>">
+                                    </div>
+                                <td>
+                                    <select class="form-control" name="CO<?php echo $i ?>" required>
+                                        <?php for ($j = 1; $j <= 12; $j++) { ?>
+                                            <option value="<?php echo $j ?>">PO<?php echo $j ?></option>
+                                        <?php } ?>
+
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <div class=" form-group">
+                                        <input type="text" size="50" name="cocontent<?php echo $i ?>" class="form-control" value="<?php echo $cnnt ?>">
+
+                                    </div>
+                                <td>
+
+
+                            <tr>
+                            <?php
+                        } ?>
+                    </table>
+
+                    <button type="submit" class="btn btn-success btn-block" name="savecopo">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <?php
+
+
+    }
+
+
+
+    if (isset($_POST["savecopo"])) {
+        global $id;
+
+        $cid = $_POST['cid'];
+
+        for ($i = 1; $i <= 5; $i++) {
+
+            $z = 'costatement' . $i;
+            $costatement = $_POST[$z];
+            $z = 'CO' . $i;
+            $po = $_POST[$z];
+            $z = 'cocontent' . $i;
+            $cocontent = $_POST[$z];
+
+            $s = "select * from copo where personid='$id' && cid='$cid' && co='$i' ORDER BY id DESC";
+            $result = mysqli_query($con, $s);
+            $num = mysqli_num_rows($result);
+
+            if ($num == 0) {
+                $query = "INSERT INTO copo VALUES('','$id','$cid','$i','$po','$costatement','$cocontent') ";
+                mysqli_query($con, $query);
+            } else {
+                $var = mysqli_fetch_assoc($result);
+                $newID = $var['id'];
+
+                $query = "UPDATE copo SET statement='$costatement', content='$cocontent' ,po='$po' WHERE id=$newID";
+
+                mysqli_query($con, $query);
+            }
+        }
+    }
+
+
+
+
+
     // _____________input co marks________________-
     if (isset($_POST["inputco"])) {
 
@@ -382,7 +600,7 @@ if ($type != "Teacher") {
         $num = mysqli_num_rows($result);
         if ($num != 0) {
 
-    ?>
+        ?>
             <div class="d-flex justify-content-center">
                 <div class="list">
                     <form method='post'>
@@ -3312,7 +3530,7 @@ if ($type != "Teacher") {
 
                             </div>
 
-                            
+
 
                             <div class="d-flex justify-content-end">
                                 <button type="submit" class="btn btn-success" name="showCTmarkForm">NEXT</button>
@@ -3359,7 +3577,7 @@ if ($type != "Teacher") {
                 $rollEnd = $_POST['rollEnd'];
                 $course = $_POST['course'];
                 $ctno = $_POST['ctno'];
-            
+
 
 
 
@@ -3443,7 +3661,7 @@ if ($type != "Teacher") {
                             <input type="hidden" name="ctno" value="<?php echo $ctno ?>">
 
                             <?php
-                
+
 
                             ?>
 
@@ -3457,7 +3675,7 @@ if ($type != "Teacher") {
                                     <td>
                                         <h5>Class-Test Marks <br>(20)</h5>
                                     </td>
-                                   
+
                                 </tr>
 
                                 <?php
@@ -3520,9 +3738,9 @@ if ($type != "Teacher") {
                 $rollEnd = $_POST['rollEnd'];
                 $course = $_POST['course'];
                 $ctno = $_POST['ctno'];
-              
 
-               
+
+
 
 
                 $datatable = "marks";
@@ -3550,7 +3768,6 @@ if ($type != "Teacher") {
 
                         mysqli_query($con, $query);
                     }
-
                 }
 
 
