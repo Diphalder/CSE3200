@@ -378,7 +378,8 @@ if ($type != "Teacher") {
 
 
 
-    if (isset($_POST["codesign"])) {
+    if (isset($_POST["codesign"])) 
+    {
 
         echo '<script type="text/javascript">myFunction();</script>';
         global $id, $con;
@@ -390,8 +391,7 @@ if ($type != "Teacher") {
 
 
         if ($num != 0) {
-
-    ?>
+            ?>
             <div class="d-flex justify-content-center">
                 <div class="list">
                     <form method='post'>
@@ -654,6 +654,15 @@ if ($type != "Teacher") {
                 mysqli_query($con, $query);
             }
         }
+        ?>
+
+
+        <div class="d-flex justify-content-center">
+                <div class="list">
+                    <h3>Data Store successfully</h3>
+                </div>
+            </div>
+            <?php
     }
 
 
