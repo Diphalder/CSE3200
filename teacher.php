@@ -591,7 +591,8 @@ if ($type != "Teacher") {
 
 
     // _____________input co marks________________-
-    if (isset($_POST["inputco"])) {
+    if (isset($_POST["inputco"])) 
+    {
 
         echo '<script type="text/javascript">myFunction();</script>';
         global $id, $con;
@@ -714,7 +715,8 @@ if ($type != "Teacher") {
 
 
 
-    if (isset($_POST["showCOmarkForm"])) {
+    if (isset($_POST["showCOmarkForm"])) 
+    {
         echo '<script type="text/javascript">myFunction();</script>';
 
         $rollStart = $_POST['rollStart'];
@@ -926,14 +928,14 @@ if ($type != "Teacher") {
                 </div>
             </div>
         </div>
-
-    <?php
+        <?php
 
 
     }
 
 
-    if (isset($_POST["takeCOmarksDone"])) {
+    if (isset($_POST["takeCOmarksDone"])) 
+    {
         echo '<script type="text/javascript">myFunction();</script>';
         global $name;
         global $con;
@@ -988,9 +990,7 @@ if ($type != "Teacher") {
                 }
             }
         }
-
-
-    ?>
+        ?>
         <div class="d-flex justify-content-center">
             <div class="list">
                 <h3>Data Store successfully</h3>
@@ -1008,12 +1008,10 @@ if ($type != "Teacher") {
 
 
 
-
-
-
     //_____________CO_____________
 
-    if (isset($_POST["co"])) {
+    if (isset($_POST["co"])) 
+    {
         echo '<script type="text/javascript">myFunction();</script>';
 
         global $id, $con;
@@ -1095,7 +1093,8 @@ if ($type != "Teacher") {
     }
 
 
-    if (isset($_POST["viewCO"])) {
+    if (isset($_POST["viewCO"])) 
+    {
         echo '<script type="text/javascript">myFunction();</script>';
 
         $rollStart = $_POST['rollStart'];
@@ -1213,7 +1212,7 @@ if ($type != "Teacher") {
 
 
 
-        </div><?php
+         </div><?php
 
 
 
@@ -1221,10 +1220,11 @@ if ($type != "Teacher") {
 
 
 
-            }
+    }
 
 
-            if (isset($_POST["COmoredetails"])) {
+    if (isset($_POST["COmoredetails"])) 
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
 
                 $rollStart = $_POST['rollStart'];
@@ -1438,7 +1438,7 @@ if ($type != "Teacher") {
 
 
 
-            }
+    }
 
 
 
@@ -1449,8 +1449,9 @@ if ($type != "Teacher") {
 
 
 
-            //______________lab mark_____________
-            if (isset($_POST["addlabmark"])) {
+    //______________lab mark_____________
+    if (isset($_POST["addlabmark"])) 
+    {
 
                 echo '<script type="text/javascript">myFunction();</script>';
 
@@ -1533,7 +1534,7 @@ if ($type != "Teacher") {
         <?php
 
                 }
-            }
+    }
 
 
 
@@ -1546,7 +1547,8 @@ if ($type != "Teacher") {
 
 
 
-            if (isset($_POST["getLabmark"])) {
+    if (isset($_POST["getLabmark"])) 
+    {
 
                 echo '<script type="text/javascript">myFunction();</script>';
 
@@ -1692,14 +1694,17 @@ if ($type != "Teacher") {
             </div>
         </div>
 
-    <?php
+         <?php
 
 
 
 
 
-            }
-            if (isset($_POST["savelabmarks"])) {
+    }
+            
+    
+    if (isset($_POST["savelabmarks"])) 
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
 
                 global $name;
@@ -1735,9 +1740,7 @@ if ($type != "Teacher") {
                         mysqli_query($con, $query);
                     }
                 }
-
-
-    ?>
+                ?>
         <div class="d-flex justify-content-center">
             <div class="list">
                 <h3>Data Store successfully</h3>
@@ -1749,15 +1752,16 @@ if ($type != "Teacher") {
 
 
 
-            }
+    }
 
 
 
 
 
 
-            //______________project mark_____________
-            if (isset($_POST["addprojectmark"])) {
+    //______________project mark_____________
+    if (isset($_POST["addprojectmark"])) 
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
 
                 global $id, $con;
@@ -1877,8 +1881,10 @@ if ($type != "Teacher") {
         <?php
 
                 }
-            }
-            if (isset($_POST["saveprojectmark"])) {
+    }
+            
+    if (isset($_POST["saveprojectmark"])) 
+    {
 
                 global $id, $con;
 
@@ -1906,10 +1912,11 @@ if ($type != "Teacher") {
         </div>
 
         <?php
+    }
 
-            }
-
-            if (isset($_POST["viewprojectmark"])) {
+            
+    if (isset($_POST["viewprojectmark"])) 
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
                 global $id, $con;
                 $cid = $_POST["course"];
@@ -1983,8 +1990,10 @@ if ($type != "Teacher") {
 
 
                 }
-            }
-            if (isset($_POST["editprojectmark"])) {
+    }
+            
+    if (isset($_POST["editprojectmark"])) 
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
                 global $id, $con;
                 $cid = $_POST["cid"];
@@ -2047,10 +2056,11 @@ if ($type != "Teacher") {
         <?php
 
 
+    }
 
-            }
-
-            if (isset($_POST["saveeditprojectmark"])) {
+            
+    if (isset($_POST["saveeditprojectmark"])) 
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
                 global $id, $con;
                 $cid = $_POST["cid"];
@@ -2151,11 +2161,13 @@ if ($type != "Teacher") {
 
 
                 }
-            }
+            
+    }
 
 
 
-            if (isset($_POST["deleteprojectmark"])) {
+    if (isset($_POST["deleteprojectmark"])) 
+    {
 
                 echo '<script type="text/javascript">myFunction();</script>';
                 global $id, $con;
@@ -2211,9 +2223,10 @@ if ($type != "Teacher") {
         </div>
 
     <?php
-
-            }
-            if (isset($_POST["donedeleteprojectmark"])) {
+    }
+            
+    if (isset($_POST["donedeleteprojectmark"])) 
+    {
 
                 echo '<script type="text/javascript">myFunction();</script>';
 
@@ -2233,8 +2246,7 @@ if ($type != "Teacher") {
                 }
 
                 kkkk:
-
-    ?>
+                ?>
 
         <div class="d-flex justify-content-center">
             <div class="list">
@@ -2245,15 +2257,16 @@ if ($type != "Teacher") {
 
         <?php
 
-            }
+    }
 
 
 
 
 
-            //______________final marks_____________
+    //______________final marks_____________
 
-            if (isset($_POST["finalmark"])) {
+    if (isset($_POST["finalmark"])) 
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
 
 
@@ -2338,9 +2351,12 @@ if ($type != "Teacher") {
 
 
                 }
-            }
+    }
 
-            if (isset($_POST["getfinalmark"])) {
+            
+    
+    if (isset($_POST["getfinalmark"])) 
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
 
                 $rollStart = $_POST['rollStart'];
@@ -2462,15 +2478,15 @@ if ($type != "Teacher") {
                 </form>
             </div>
         </div>
-
-    <?php
-
-
-
-
-
-            }
-            if (isset($_POST["savefinalmarks"])) {
+        <?php
+        
+    }
+            
+    
+    
+    
+    if (isset($_POST["savefinalmarks"])) 
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
 
                 global $name;
@@ -2507,27 +2523,23 @@ if ($type != "Teacher") {
                         mysqli_query($con, $query);
                     }
                 }
-
-
-    ?>
+            ?>
         <div class="d-flex justify-content-center">
             <div class="list">
                 <h3>Data Store successfully</h3>
             </div>
         </div>
         <?php
+        
+    }
 
 
 
 
-
-            }
-
-
-
-
-            //______________view attendance sheet_____________
-            if (isset($_POST["viewAttendance"])) {
+    //______________view attendance sheet_____________
+            
+    if (isset($_POST["viewAttendance"])) 
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
 
                 global $id, $con;
@@ -2609,9 +2621,11 @@ if ($type != "Teacher") {
             <?php
 
                 }
-            }
+    }
 
-            if (isset($_POST["showAttendance"])) {
+            
+    if (isset($_POST["showAttendance"])) 
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
                 $rollStart = $_POST['rollStart'];
                 $rollEnd = $_POST['rollEnd'];
@@ -2742,20 +2756,21 @@ if ($type != "Teacher") {
 
             </div>
             <?php
-            }
+    }
 
 
+//____________view course_____________
 
-            //____________view course_____________
-
-            if (isset($_POST["viewCourse"])) {
+    if (isset($_POST["viewCourse"])) 
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
                 showCourse();
-            }
+    }
 
 
-            //________________add course______________
-            if (isset($_POST["addCourse"])) {
+    //________________add course______________
+    if (isset($_POST["addCourse"])) 
+    {
 
                 echo '<script type="text/javascript">myFunction();</script>';
 
@@ -2843,10 +2858,11 @@ if ($type != "Teacher") {
                 </div>
             <?php
                 }
-            }
+    }
 
 
-            if (isset($_POST["courseAddDone"])) {
+    if (isset($_POST["courseAddDone"])) 
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
 
                 $courses = $_POST['courses'];
@@ -2879,14 +2895,14 @@ if ($type != "Teacher") {
             <?php
 
                 showCourse();
-            }
+    }
 
 
 
 
 
-            function showCourse()
-            {
+    function showCourse()
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
                 global $id, $con;
                 $datatable = "course";
@@ -3008,11 +3024,13 @@ if ($type != "Teacher") {
 
 
                 }
-            }
+    }
 
-            //__________delete course_____________
+    //__________delete course_____________
 
-            if (isset($_POST["deleteCourse"])) {
+            
+    if (isset($_POST["deleteCourse"])) 
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
 
 
@@ -3078,9 +3096,13 @@ if ($type != "Teacher") {
                 </div>
             <?php
                 }
-            }
+            
+            
+    }
 
-            if (isset($_POST["courseDeleteDone"])) {
+
+    if (isset($_POST["courseDeleteDone"])) 
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
 
                 $courses = $_POST['courses'];
@@ -3113,7 +3135,7 @@ if ($type != "Teacher") {
             <?php
 
                 showCourse();
-            }
+    }
 
 
 
@@ -3123,9 +3145,10 @@ if ($type != "Teacher") {
 
 
 
-            //_____________input attendance___________________
+    //_____________input attendance___________________
 
-            if (isset($_POST["attendance"])) {
+    if (isset($_POST["attendance"])) 
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
 
                 global $id, $con;
@@ -3161,11 +3184,11 @@ if ($type != "Teacher") {
 
 
                 }
-            }
+    }
 
 
-            function showAttendanceform()
-            {
+    function showAttendanceform()        
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
             ?>
             <div class="d-flex justify-content-center">
@@ -3233,11 +3256,13 @@ if ($type != "Teacher") {
 
         <?php
 
-            }
+    }
 
 
 
-            if (isset($_POST["takeAttendance"])) {
+            
+    if (isset($_POST["takeAttendance"])) 
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
                 $rollStart = $_POST['rollStart'];
                 $rollEnd = $_POST['rollEnd'];
@@ -3422,9 +3447,12 @@ if ($type != "Teacher") {
 
 
 
-            }
+    }
 
-            if (isset($_POST["takeAttendanceDone"])) {
+            
+    
+    if (isset($_POST["takeAttendanceDone"])) 
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
 
                 $rollStart = $_POST['rollStart'];
@@ -3474,12 +3502,14 @@ if ($type != "Teacher") {
             </div>
             <?php
 
-            }
+    }
 
 
 
-            //_____ input ct marks_______________
-            if (isset($_POST["ctmark"])) {
+    //_____ input ct marks_______________
+            
+    if (isset($_POST["ctmark"])) 
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
                 global $id, $con;
                 $s = "SELECT distinct(courselist.cid) , courselist.ccode , courselist.cname FROM courselist, course WHERE courselist.cid = course.cid and course.personID=$id  and courselist.type ='Theory' ";
@@ -3568,9 +3598,12 @@ if ($type != "Teacher") {
             <?php
 
                 }
-            }
+            
+    }
 
-            if (isset($_POST["showCTmarkForm"])) {
+            
+    if (isset($_POST["showCTmarkForm"])) 
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
 
                 $rollStart = $_POST['rollStart'];
@@ -3725,10 +3758,12 @@ if ($type != "Teacher") {
         <?php
 
 
-            }
+    }
 
 
-            if (isset($_POST["takeCTmarksDone"])) {
+            
+    if (isset($_POST["takeCTmarksDone"])) 
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
                 global $name;
                 global $con;
@@ -3781,12 +3816,15 @@ if ($type != "Teacher") {
 
 
 
-            }
+    }
 
 
-            //_________ view ct marks__________
+            
+    //_________ view ct marks__________
 
-            if (isset($_POST["viewCTmarks"])) {
+            
+    if (isset($_POST["viewCTmarks"])) 
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
                 global $id, $con;
                 $s = "SELECT distinct(courselist.cid) , courselist.ccode , courselist.cname FROM courselist, course WHERE courselist.cid = course.cid and course.personID=$id and courselist.type ='Theory' ";
@@ -3866,9 +3904,12 @@ if ($type != "Teacher") {
             <?php
 
                 }
-            }
+            
+    }
 
-            if (isset($_POST["showCTmarks"])) {
+            
+    if (isset($_POST["showCTmarks"])) 
+    {
                 echo '<script type="text/javascript">myFunction();</script>';
 
                 $rollStart = $_POST['rollStart'];
@@ -3962,18 +4003,17 @@ if ($type != "Teacher") {
 
                 </div>
             </div><?php
+            
+        
+    }
 
 
 
-
-
-
-                }
-
-
-
-                //__________view all result___________
-                if (isset($_POST["viewResult"])) {
+                
+    //__________view all result___________
+                
+    if (isset($_POST["viewResult"])) 
+    {
                     echo '<script type="text/javascript">myFunction();</script>';
 
                     global $id, $con;
@@ -4052,9 +4092,11 @@ if ($type != "Teacher") {
 
 
                     }
-                }
+    }
 
-                if (isset($_POST["showResultSheet"])) {
+                
+    if (isset($_POST["showResultSheet"])) 
+    {
                     echo '<script type="text/javascript">myFunction();</script>';
 
                     $cid = $_POST['course'];
@@ -4548,7 +4590,7 @@ if ($type != "Teacher") {
 
 
                     }
-                }
+    }
 
 
         ?>
