@@ -464,26 +464,28 @@ if ($type != "Teacher") {
         <div class="d-flex justify-content-center">
             <div class="list">
 
-                <div class="form-group" ">
+                <div class="form-group">
 
       <form  method='post'>
 
       <input type="hidden" name="cid" value="<?php echo $cid ?>">
+      <div class="mini">
                     <h3>Design CO[course outcome] Map PO [program outcome]</h3>
-                    <table class=" table table-striped ">
-                        <tr>
+      </div>
+      
+                    <table class="table table-striped">
+                        <tr> 
                             <td>
                                 <h5>Course<br>outcome</h5>
                             </td>
                             <td>
                                 <h5>CO statement</h5>
                             </td>
-                            <td>
-                                <h5>Program<br>outcome</h5>
-                            </td>
+                    
                             <td>
                                 <h5>Content</h5>
                             </td>
+                            
                         </tr>
 
                         <?php
@@ -497,7 +499,7 @@ if ($type != "Teacher") {
 
 
                             global $id, $con;
-                            $sss = "SELECT * from copo where personid='$id' and co='$i'";
+                            $sss = "SELECT * from copo where personid='$id' and co='$i' and cid='$cid'";
                             $rrr = mysqli_query($con, $sss);
                             $nnn = mysqli_num_rows($rrr);
                             $vvv = mysqli_fetch_assoc($rrr);
@@ -513,33 +515,78 @@ if ($type != "Teacher") {
 
                         ?>
                             <tr>
-                                <td>CO <?php echo $i ?> </td>
+                            <td><div class="list">CO-<?php echo $i ?></div> </td>
 
                                 <td>
                                     <div class=" form-group">
                                         <input type="text" size="50" name="costatement<?php echo $i ?>" class="form-control" value="<?php echo $stmnt ?>">
                                     </div>
-                                <td>
-                                    <select class="form-control" name="CO<?php echo $i ?>" required>
-                                        <?php for ($j = 1; $j <= 12; $j++) { ?>
-                                            <option value="<?php echo $j ?>">PO<?php echo $j ?></option>
-                                        <?php } ?>
-
-                                    </select>
-                                </td>
-
+                              
                                 <td>
                                     <div class=" form-group">
-                                        <input type="text" size="50" name="cocontent<?php echo $i ?>" class="form-control" value="<?php echo $cnnt ?>">
+                                        <input type="text" size="50"  name="cocontent<?php echo $i ?>" class="form-control" value="<?php echo $cnnt ?>">
 
                                     </div>
                                 <td>
 
+                            <tr>
 
                             <tr>
+                                <td></td>
+                                
+                                <td style="text-align: center;" colspan="2">
+                                <div  style="text-align: center;" class="list">
+                                <table>
+                                
+                                <tr>
+                                    
+                                        <?php
+                                        for ($j = 1; $j <= 12; $j++) 
+                                        { 
+                                        ?>   
+                                            <td style="text-align: center;">PO-<?php echo $j ?></h5></td>
+                                                
+                                        <?php
+                                        }
+                                        ?>
+                                        </tr>
+                                        
+                                        <tr>
+
+                                         <?php
+                                        for ($j = 1; $j <= 12; $j++) 
+                                        { 
+
+
+
+                                            $z='po'.$j;
+                                            $click='';
+                                            if ($nnn != 0) {
+                                            if ($vvv[$z]=='1') 
+                                            {
+                                                $click = 'checked';
+                                            }
+                                        }
+
+
+
+                                        ?>
+                                            <td style="text-align: center;"> <input type="checkbox" class="largerCheckbox" <?php echo  $click ?> value="CO<?php echo $i ?>PO<?php echo $j ?>" name="pos[]"></td>
+                                            
+                                        <?php
+                                        }
+                                        ?>
+                                        </tr>
+                                        
+                                </table>
+                                </div>    
+                            </td>
+
+                            </tr>
                             <?php
                         } ?>
                     </table>
+        
 
                     <button type="submit" class="btn btn-success btn-block" name="savecopo">Save</button>
                     </form>
@@ -558,28 +605,51 @@ if ($type != "Teacher") {
         global $id;
 
         $cid = $_POST['cid'];
+        $pos = $_POST['pos'];
+    
+
+        for ($i = 1; $i <= 5; $i++)
+        {
+            for ($j = 1; $j <= 12; $j++)
+            {
+                $z='CO'.$i.'PO'.$j;
+                $copo[$z]="";
+            }
+        }
+
+        for ($i = 0; $i < sizeof($pos); $i++) {
+            $copo[$pos[$i]]='1';
+        }
+
+
 
         for ($i = 1; $i <= 5; $i++) {
 
             $z = 'costatement' . $i;
             $costatement = $_POST[$z];
-            $z = 'CO' . $i;
-            $po = $_POST[$z];
-            $z = 'cocontent' . $i;
+            
+            $z = 'cocontent'.$i;
             $cocontent = $_POST[$z];
+
+            $po[]="";
+            for ($j = 1; $j <= 12; $j++)
+            {
+                $z='CO'.$i.'PO'.$j;
+                $po[$j]=$copo[$z];
+            }
 
             $s = "select * from copo where personid='$id' && cid='$cid' && co='$i' ORDER BY id DESC";
             $result = mysqli_query($con, $s);
             $num = mysqli_num_rows($result);
 
             if ($num == 0) {
-                $query = "INSERT INTO copo VALUES('','$id','$cid','$i','$po','$costatement','$cocontent') ";
+                $query = "INSERT INTO copo VALUES('','$id','$cid','$i','$costatement','$cocontent','$po[1]','$po[2]','$po[3]','$po[4]','$po[5]','$po[6]','$po[7]','$po[8]','$po[9]','$po[12]','$po[11]','$po[12]') ";
                 mysqli_query($con, $query);
             } else {
                 $var = mysqli_fetch_assoc($result);
                 $newID = $var['id'];
 
-                $query = "UPDATE copo SET statement='$costatement', content='$cocontent' ,po='$po' WHERE id=$newID";
+                $query = "UPDATE copo SET statement='$costatement', content='$cocontent' ,po1='$po[1]',po2='$po[2]',po3='$po[3]',po4='$po[4]',po5='$po[5]',po6='$po[6]',po7='$po[7]',po8='$po[8]',po9='$po[9]',po10='$po[10]',po12='$po[12]',po11='$po[11]' WHERE id=$newID";
 
                 mysqli_query($con, $query);
             }
@@ -650,15 +720,16 @@ if ($type != "Teacher") {
                             <label>Course Outcome</label>
 
                             <table class="table table-striped table-bordered" ">
-            <tr>
-                <td>Course outcome </td>
-                <td>select </td>
-                <td>Total mark </td>
-            </tr>
-       
-       <?php
-            for ($i = 1; $i <= 5; $i++) { ?><tr>
-        <td style=" text-align: center;">CO<?php echo $i ?></td>
+                        <tr>
+                            <td>Course outcome </td>
+                            <td>select </td>
+                            <td>Total mark </td>
+                        </tr>
+                        <?php
+                         
+                        for ($i = 1; $i <= 5; $i++) 
+                        { 
+                            ?><tr><td style=" text-align: center;">CO<?php echo $i ?></td>
                                 <div class="checkbox">
                                     <td style="text-align: center;"><input type="checkbox" class="largerCheckbox" value="CO<?php echo $i ?>" name="COS[]"></td>
                                 </div>
@@ -667,7 +738,7 @@ if ($type != "Teacher") {
                                 </tr>
                             <?php
                         }
-                            ?>
+                        ?>
                             </table>
 
                         </div>
@@ -731,8 +802,6 @@ if ($type != "Teacher") {
         for ($i = 0; $i < sizeof($COS); $i++) {
             $coTotalMark["$COS[$i]"] = $_POST["total$COS[$i]"];
         }
-
-
 
 
 
