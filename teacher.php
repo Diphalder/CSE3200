@@ -523,7 +523,7 @@ if (isset($_POST["ctsyllabusesign2"]))
                         
                         ?>
                         <label  for="exampleFormControlTextarea1"> Class-Test topic:</label>
-                        <textarea  rows="3" name="topic" class="form-control input-lg" value="<?php echo  $topic ?>"><?php echo  $topic ?></textarea>
+                        <textarea  rows="3" style="width: 600px;" name="topic" class="form-control input-lg" value="<?php echo  $topic ?>"><?php echo  $topic ?></textarea>
                             </div>
 
                         <div>
@@ -913,7 +913,7 @@ if (isset($_POST["ctsyllabusesign3"]))
                     <td style="text-align: center;"><h5><?php echo $i ?></h5></td>
                         <td>
                             <div class=" form-group">
-                                <input type="text"  name="topic<?php echo $i ?>" class="form-control" value="<?php echo $tpk ?>">
+                                <textarea  rows="3" style="width: 600px;"  name="topic<?php echo $i ?>" class="form-control input-lg" ><?php echo $tpk ?></textarea>
                             </div>
                         </td>
                             <?php
@@ -1319,12 +1319,14 @@ if (isset($_POST["ctsyllabusesign3"]))
 
                                 <td>
                                     <div class=" form-group">
-                                        <input type="text"  name="costatement<?php echo $i ?>" class="form-control" value="<?php echo $stmnt ?>">
+        
+                                        <textarea  rows="3" style="width: 600px;"  name="costatement<?php echo $i ?>" class="form-control input-lg" ><?php echo $stmnt ?></textarea>
                                     </div>
                               
                                 <td>
                                     <div class=" form-group">
-                                        <input type="text"  name="cocontent<?php echo $i ?>" class="form-control" value="<?php echo $cnnt ?>">
+                                    <textarea  rows="3" style="width: 600px;"  name="cocontent<?php echo $i ?>" class="form-control input-lg" ><?php echo $cnnt ?></textarea>
+
 
                                     </div>
                                 <td>

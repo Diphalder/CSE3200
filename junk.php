@@ -21,3 +21,5 @@ document.getElementById("demo").innerHTML = "<?php ?><div>
     </select>
 </div><?php ?>";
 }
+
+<textarea  rows="3" style="width: 600px;"  name="" class="form-control input-lg" ></textarea>
