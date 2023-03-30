@@ -619,12 +619,19 @@ if ($type != "Teacher") {
                         $result = mysqli_query($con, $s);
                         $num = mysqli_num_rows($result);
                         $var = mysqli_fetch_assoc($result);
+
+                        $tpk="";
+                        if($num)
+                        {
+                            $tpk=$var['topic'] ;
+                        }
+
                         ?>
                     <tr>
                     <td style="text-align: center;"><h5><?php echo $i ?></h5></td>
                         <td>
                             <div class=" form-group">
-                                <input type="text"  name="topic<?php echo $i ?>" class="form-control" value="<?php echo $var['topic']  ?>">
+                                <input type="text"  name="topic<?php echo $i ?>" class="form-control" value="<?php echo $tpk ?>">
                             </div>
                         </td>
                             <?php
@@ -848,7 +855,7 @@ if ($type != "Teacher") {
 
 
       <div class="list">
-      <div class="list">
+      <div class="mini">
                     <h3>Design CO[course outcome] Map PO [program outcome]</h3>
       </div>
       
@@ -894,7 +901,7 @@ if ($type != "Teacher") {
 
                         ?>
                             <tr>
-                            <td><div class="list">CO-<?php echo $i ?></div> </td>
+                            <td><div class="mini">CO-<?php echo $i ?></div> </td>
 
                                 <td style="max-width:400px;word-wrap:break-word;">
                                     <div class=" form-group">
@@ -914,7 +921,7 @@ if ($type != "Teacher") {
                                 <td></td>
                                 
                                 <td style="text-align: center;" colspan="2">
-                                <div  style="text-align: center;" class="list">
+                                <div  style="text-align: center;" class="mini">
                                 <table>
                                 
                                 <tr>

@@ -354,18 +354,6 @@ if (isset($_POST["addroll"])) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
                         </div>
 
 
@@ -399,7 +387,8 @@ if (isset($_POST["addroll"])) {
 
 
     <?php
-    if (isset($_POST["viewprofile"])) {
+if (isset($_POST["viewprofile"])) 
+{
         echo '<script type="text/javascript">myFunction();</script>';
 
     ?>
@@ -664,7 +653,7 @@ if (isset($_POST["addroll"])) {
 
 
     <?php
-    }
+}
     ?>
 
 
@@ -684,6 +673,12 @@ if (isset($_POST["addroll"])) {
 
             <div class="btn-group">
                 <form method='post'>
+                    <button type="submit" class="btn btn-primary" name="viewsyllabus">view Syllabus</button>
+                </form>
+            </div>
+
+            <div class="btn-group">
+                <form method='post'>
                     <button type="submit" class="btn btn-primary" name="viewCO">view Course Outcome</button>
                 </form>
             </div>
@@ -693,6 +688,8 @@ if (isset($_POST["addroll"])) {
                     <button type="submit" class="btn btn-primary" name="viewResult1">view Result</button>
                 </form>
             </div>
+
+            
 
         </div>
     </div>
@@ -707,15 +704,372 @@ if (isset($_POST["addroll"])) {
     <?php
 
 
+//______________view  syllabus______________
 
+if (isset($_POST["viewsyllabus"])) 
+{
+
+    echo '<script type="text/javascript">myFunction();</script>';
+
+    ?>
+
+        <?php
+
+        if ($roll != '') {
+            echo '<script type="text/javascript">myFunction();</script>';
+            global $id, $con, $datatablelogin;
+            $datatable = "course";
+            $s = "SELECT courselist.cid, courselist.ccode, courselist.cname, courselist.type, courselist.credit FROM courselist,student WHERE student.deptid=courselist.deptid and courselist.year=student.year and courselist.semester= student.sem and student.id =$id and courselist.type in('Theory','Lab') ";
+            $result = mysqli_query($con, $s);
+            $num = mysqli_num_rows($result);
+            ?>
+             <div class="d-flex justify-content-center">
+            <div class="list">
+                <form method='post'>
+                    <?php
+
+            if ($num != 0) {
+                ?>
+                 <div>
+                        <label>select Course</label>
+                        <select onchange="showtcr();" class="form-control" name="cid">
+                            <?php
+                
+                            while ($var = mysqli_fetch_assoc($result)) {
+                            $cid = $var['cid'];
+                            $cname= $var['cname'];
+
+                            ?>
+                            <option  value='<?php echo $cid ?>'> <?php echo $cname ?> </option>
+                        
+                            <?php
+                            }
+
+                            ?>
+                             </select>
+                            
+                             </div>
+
+                             <button type="submit" class="btn btn-success" name="viewsyllabus2">NEXT</button>
+
+    
+                        </form>
+
+                    </div>
+                </div>
+
+            <?php
+
+            } 
+            
+            else {
+            ?>
+
+                <div class="d-flex justify-content-center">
+
+                    <div class='list'>
+                        <div class="minibox">
+                            <h3>No Course are available</h3>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            <?php
+
+            }
+        } else {
+            ?>
+            <div class="d-flex justify-content-center">
+                <div class="list">
+                    <h3>Please add Roll number</h3>
+                </div>
+            </div>
+        <?php
+
+
+        }
+
+
+        
+}
+
+if (isset($_POST["viewsyllabus2"])) 
+{
+    echo '<script type="text/javascript">myFunction();</script>';
+    global $id, $con, $datatablelogin;
+    $datatable = "course";
+    $cid = $_POST['cid'];
+
+
+    $s = "select * from $datatable where type='Teacher' && cid=$cid ";
+    $r = mysqli_query($con, $s);
+     ?> 
+     
+       <div class="d-flex justify-content-center">
+            <div class="list">
+                <form method='post'>
+                <input type="hidden" name="cid" value="<?php echo $cid ?>">  
+      <div>
+        <label>Teacher Name select </label>
+        <select class="form-control" name="personID">
+    
+      <?php
+        while ($v = mysqli_fetch_assoc($r)) {
+            $newid = $v['personID'];
+            $q = "select * from $datatablelogin WHERE id=$newid ";
+            $k = mysqli_query($con, $q);
+            $d = mysqli_fetch_assoc($k);
+            $tcrName = $d['name'];
+            ?> <option  value='<?php echo $newid ?>'> <?php echo $tcrName ?> </option> <?php
+        
+        }
+
+     ?>
+      </select> 
+      </div>
+      <button type="submit" class="btn btn-success" name="viewsyllabus3">NEXT</button>
+               
+        </form>
+        </div>
+       </div>
+      </div> 
+      <?php
+
+
+}
+if (isset($_POST["viewsyllabus3"])) 
+{
+    echo '<script type="text/javascript">myFunction();</script>';
+    global $id, $con, $datatablelogin;
+    $datatable = "course";
+    $cid = $_POST['cid'];
+    $personID=$_POST['personID'];
+?>
+
+    <div class="d-flex justify-content-center">
+        <div class="list">
+
+          
+         <div class="mini">
+                <h3 style="text-align: center;">Syllabus Design</h3>
+        </div>
+  
+            <div class="list">
+                <table class="table table-striped">
+                    <tr>
+                    <td style="text-align: center;">
+                            <h5>Week <br> no.</h5>
+                        </td> 
+                        <td style="text-align: center;">
+                            <h5>Topic</h5>
+                        </td>
+                        <td style="text-align: center;" colspan="5">
+                            <h5>Course Outcome </h5>
+                        </td>
+                    
+                    <?php 
+                    
+                    for($i=1;$i<=13;$i++)
+                    {
+
+                        $s = "select * from syllabus where personid='$personID' && cid='$cid' && week='$i' ORDER BY id DESC";
+                        $result = mysqli_query($con, $s);
+                        $num = mysqli_num_rows($result);
+                        $var = mysqli_fetch_assoc($result);
+
+                        $tpk="";
+                        if($num)
+                        {
+                            $tpk= $var['topic'] ;
+
+                        }
+
+                        ?>
+                    <tr>
+                    <td style="text-align: center;"><h5><?php echo $i ?></h5></td>
+                        <td style="max-width:500px;word-wrap:break-word;">
+                          
+                                <?php echo $tpk ?>
+                          
+                        </td>
+                            <?php
+ 
+                            for($j=1;$j<=5;$j++)
+                            {
+                                $z='co'.$j;
+                                if ($num != 0) 
+                                {
+                                if ($var[$z]=='1') 
+                                {
+                                    ?>
+                           
+                                        <td style="text-align: center;"> CO-<?php echo $j ?>  </td>
+                                                                    
+                                    <?php
+                                }
+                            }
+                        
+                             
+                            }
+                            ?>
+
+
+                    </tr> 
+
+
+
+
+                    <?php 
+                    }?>
+
+
+                </table>
+    </div>
+    
+
+          
+        </div>
+    </div>
+
+    <?php
+
+    ?>  
+
+
+    <div class="d-flex justify-content-center">
+    <div class="list">
+
+       
+
+
+    <div class="list">
+    <div class="mini">
+                <h3>Design CO[course outcome] Map PO [program outcome]</h3>
+    </div>
+
+                <table class="table table-striped">
+                    <tr> 
+                        <td>
+                            <h5>Course<br>outcome</h5>
+                        </td>
+                        <td>
+                            <h5>CO statement</h5>
+                        </td>
+                
+                        <td>
+                            <h5>Content</h5>
+                        </td>
+                        
+                    </tr>
+
+                    <?php
+
+                    for ($i = 1; $i <= 5; $i++) {
+                        $s = "SELECT distinct(courselist.cid) , courselist.ccode , courselist.cname FROM courselist, course WHERE courselist.cid = course.cid and course.personID=$id and courselist.type in('Theory')";
+                        $result = mysqli_query($con, $s);
+                        $num = mysqli_num_rows($result);
+                        $var = mysqli_fetch_assoc($result);
+
+
+
+                        global $id, $con;
+                        $sss = "SELECT * from copo where personid='$personID' and co='$i' and cid='$cid'";
+                        $rrr = mysqli_query($con, $sss);
+                        $nnn = mysqli_num_rows($rrr);
+                        $vvv = mysqli_fetch_assoc($rrr);
+
+
+                        $stmnt = "";
+                        $cnnt = "";
+                        if ($nnn != 0) {
+                            $stmnt = $vvv['statement'];
+                            $cnnt = $vvv['content'];
+                        }
+
+
+                    ?>
+                        <tr>
+                        <td><div class="mini">CO-<?php echo $i ?></div> </td>
+
+                            <td style="max-width:400px;word-wrap:break-word;">
+                                <div class=" form-group">
+                                <?php echo $stmnt ?>
+                                </div>
+                        
+                            <td style="max-width:400px;word-wrap:break-word;">
+                                <div class=" form-group">
+                                    <?php echo $cnnt ?>
+
+                                </div>
+                            <td>
+
+                        <tr>
+
+                        <tr>
+                            <td></td>
+                            
+                            <td style="text-align: center;" colspan="2">
+                            <div  style="text-align: center;" class="mini">
+                            <table>
+                            
+                            <tr>
+                                
+                                    <?php
+                                    for ($j = 1; $j <= 12; $j++) 
+                                    {
+                                        $z='po'.$j;
+                                        $click='';
+                                        if ($nnn != 0) {
+                                        if ($vvv[$z]=='1') 
+                                        {
+                                    ?> 
+                        
+                                        <td style="text-align: center;">PO-<?php echo $j ?></h5></td>
+                                            
+                                    <?php
+                                        }
+                                    }
+                                    }
+                                    ?>
+                                    </tr>
+                                    
+        
+                                    
+                            </table>
+                            </div>    
+                        </td>
+
+                        </tr>
+                        <?php
+                    } ?>
+                </table>
+
+
+
+            </div>
+    
+    </div>
+    </div>
+
+    <?php
+
+
+
+
+
+
+
+}
 
 
 
 
     //____________view course_____________
 
-
-    if (isset($_POST["viewCourse"])) {
+if (isset($_POST["viewCourse"])) 
+{
         echo '<script type="text/javascript">myFunction();</script>';
 
     ?>
@@ -898,7 +1252,7 @@ if (isset($_POST["addroll"])) {
 
 
         }
-    }
+}
 
 
 
@@ -906,7 +1260,8 @@ if (isset($_POST["addroll"])) {
     // _______________view course outcome_______________
 
 
-    if (isset($_POST["viewCO"])) {
+if (isset($_POST["viewCO"])) 
+{
         echo '<script type="text/javascript">myFunction();</script>';
         ?>
         <div class="d-flex justify-content-center">
@@ -944,14 +1299,15 @@ if (isset($_POST["addroll"])) {
         <?php
 
 
-    }
+}
 
 
 
 
 
 
-    if (isset($_POST["viewCO2"])) {
+if (isset($_POST["viewCO2"])) 
+{
         echo '<script type="text/javascript">myFunction();</script>';
 
         if ($roll != '') {
@@ -1348,7 +1704,7 @@ if (isset($_POST["addroll"])) {
 
 
                         }
-                    }
+}
 
 
 
@@ -1357,9 +1713,10 @@ if (isset($_POST["addroll"])) {
 
 
 
-                    //______________view result____________________
+//______________view result____________________
 
-                    if (isset($_POST["viewResult1"])) {
+if (isset($_POST["viewResult1"])) 
+{
                         echo '<script type="text/javascript">myFunction();</script>';
                 ?>
                 <div class="d-flex justify-content-center">
@@ -1397,13 +1754,14 @@ if (isset($_POST["addroll"])) {
                 <?php
 
 
-                    }
+}
 
 
 
 
 
-                    if (isset($_POST["viewResult2"])) {
+if (isset($_POST["viewResult2"])) 
+{
                         echo '<script type="text/javascript">myFunction();</script>';
 
                         if ($roll != '') {
@@ -1669,21 +2027,10 @@ if (isset($_POST["addroll"])) {
 
 
                         }
-                    }
+}
 
 
-
-
-
-
-
-
-
-
-
-
-
-                            ?>
+?>
 
 
 
