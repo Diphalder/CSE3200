@@ -658,10 +658,6 @@ if (isset($_POST["viewprofile"]))
 
 
 
-
-
-
-
     <div class="list">
         <div class="d-flex justify-content-center">
 
