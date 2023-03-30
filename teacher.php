@@ -466,6 +466,103 @@ if ($type != "Teacher") {
 
  }
 
+ if (isset($_POST["syllabusview"]))
+ {
+    echo '<script type="text/javascript">myFunction();</script>';
+    $cid = $_POST['course'];
+
+    
+    ?>
+
+
+    <div class="d-flex justify-content-center">
+        <div class="list">
+
+          
+
+
+
+
+  <div class="mini">
+                <h3 style="text-align: center;">Syllabus Design</h3>
+  </div>
+  
+  <div class="list">
+                <table class="table table-striped">
+                    <tr>
+                    <td style="text-align: center;">
+                            <h5>Week <br> no.</h5>
+                        </td> 
+                        <td style="text-align: center;">
+                            <h5>Topic</h5>
+                        </td>
+                        <td style="text-align: center;" colspan="5">
+                            <h5>Course Outcome </h5>
+                        </td>
+                   
+
+                    
+                    <?php 
+                    
+                    for($i=1;$i<=13;$i++)
+                    {
+
+                        $s = "select * from syllabus where personid='$id' && cid='$cid' && week='$i' ORDER BY id DESC";
+                        $result = mysqli_query($con, $s);
+                        $num = mysqli_num_rows($result);
+                        $var = mysqli_fetch_assoc($result);
+                        ?>
+                    <tr>
+                    <td style="text-align: center;"><h5><?php echo $i ?></h5></td>
+                        <td style="max-width:500px;word-wrap:break-word;">
+                          
+                                <?php echo $var['topic']  ?>
+                          
+                        </td>
+                            <?php
+ 
+                            for($j=1;$j<=5;$j++)
+                            {
+                                $z='co'.$j;
+                                if ($num != 0) 
+                                {
+                                if ($var[$z]=='1') 
+                                {
+                                    ?>
+                           
+                                        <td style="text-align: center;"> CO-<?php echo $j ?>  </td>
+                                                                    
+                                    <?php
+                                }
+                            }
+                        
+                             
+                            }
+                            ?>
+
+
+                    </tr> 
+
+
+
+
+                    <?php 
+                    }?>
+
+
+                </table>
+  </div>
+    
+
+          
+        </div>
+    </div>
+
+    <?php
+
+ }
+
+
  if (isset($_POST["syllabusesign2"]))
  {
     echo '<script type="text/javascript">myFunction();</script>';
