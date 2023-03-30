@@ -354,6 +354,13 @@ if ($type != "Teacher") {
                 </form>
             </div>
 
+            <div class="btn-group">
+                <form method='post'>
+                    <button type="submit" class="btn btn-primary" name="CTsyllabusdesign"> CT Syllabus design</button>
+                </form>
+            </div>
+
+
 
             <div class="btn-group">
                 <form method='post'>
@@ -378,6 +385,281 @@ if ($type != "Teacher") {
 
 
     <?php
+
+
+
+
+// ___________ CT syllabus design________________
+
+if (isset($_POST["CTsyllabusdesign"]))
+{
+
+   echo '<script type="text/javascript">myFunction();</script>';
+   global $id, $con;
+   $s = "SELECT distinct(courselist.cid) , courselist.ccode , courselist.cname FROM courselist, course WHERE courselist.cid = course.cid and course.personID=$id and courselist.type in('Theory','Lab')";
+   $result = mysqli_query($con, $s);
+   $num = mysqli_num_rows($result);
+
+
+
+
+   if ($num != 0) {
+       ?>
+       <div class="d-flex justify-content-center">
+           <div class="list">
+               <form method='post'>
+                   <h2>Class-Test Syllabus Design </h2>
+                   <div>
+                       <label>Course Code</label>
+                       <select class="form-control" name="course" required>
+                           <?php
+                           global $id, $con;
+                           $s = "SELECT distinct(courselist.cid) , courselist.ccode , courselist.cname FROM courselist, course WHERE courselist.cid = course.cid and course.personID=$id and courselist.type in('Theory','Lab')";
+                           $result = mysqli_query($con, $s);
+                           $num = mysqli_num_rows($result);
+
+                           while ($var = mysqli_fetch_assoc($result)) { ?><option value="<?php echo $var['cid'] ?>"><?php echo $var['ccode'] . '  [' . $var['cname'] . ']' ?></option>
+                           <?php
+                           }
+
+                           ?>
+                           
+                       </select>
+
+                   </div >
+                   <div>
+                    <label>select CT no.</label>
+                            <select class="form-control" name="ctno">
+                                <?php
+                                for ($i = 1; $i <= 4; $i++) {
+                                    echo "<option value='$i' >  CT-$i  </option>";
+                                }
+                                ?>
+                            </select>
+
+                        </div>
+                   <br>
+                   <br>
+                   <div  >
+                       <button type="submit" class="btn btn-success btn-block" name="ctsyllabusview">View</button>
+
+                   </div>
+                   <br>
+
+                   <div  >
+                       <button type="submit" class="btn btn-success btn-block" name="ctsyllabusesign2">Edit</button>
+
+                   </div>
+               </form>
+           </div>
+       </div>
+
+
+   <?php
+
+
+   } else {
+   ?>
+
+       <div class="d-flex justify-content-center">
+
+           <div class='list'>
+               <div class="minibox">
+                   <h3>No Course are available</h3>
+
+               </div>
+               <div class="minibox">
+                   <div class="form-group">
+                       <form method='post'>
+                           <button type="submit" class="btn btn-success btn-block " name="addCourse">Add Course</button>
+                       </form>
+                   </div>
+               </div>
+           </div>
+
+       </div>
+
+   <?php
+
+   }
+
+
+
+}
+
+if (isset($_POST["ctsyllabusesign2"]))
+{
+   echo '<script type="text/javascript">myFunction();</script>';
+   $cid = $_POST['course'];
+   $ctno = $_POST['ctno'];
+
+   ?>
+
+   <div class="d-flex justify-content-center">
+       <div class="list">
+
+           <div class="form-group">
+
+             <form  method='post'>
+             <input type="hidden" name="cid" value="<?php echo $cid ?>">
+             <input type="hidden" name="ctno" value="<?php echo $ctno ?>">
+
+             
+                        <div class=" form-group"  >
+
+                        <?php
+                         $s = "select * from ct_topic where ctno='$ctno' && cid='$cid' && personID='$id' ORDER BY id DESC";
+                         $result = mysqli_query($con, $s);
+                         $num = mysqli_num_rows($result);
+                         $topic='';
+
+                         if($num)
+                         {
+                            $var = mysqli_fetch_assoc($result);
+                            $topic=$var['topic'];
+                         
+
+                         }
+                        
+                        ?>
+                        <label  for="exampleFormControlTextarea1"> Class-Test topic:</label>
+                        <textarea  rows="3" name="topic" class="form-control input-lg" value="<?php echo  $topic ?>"><?php echo  $topic ?></textarea>
+                            </div>
+
+                        <div>
+                            <label>Course Outcome</label>
+
+                            <table class="table table-striped table-bordered" ">
+                        <tr>
+                            <td>Course outcome </td>
+                            <td>select </td>
+                            <td>Total mark </td>
+                        </tr>
+                        <?php
+                         
+                        for ($i = 1; $i <= 5; $i++) 
+                        { 
+                            $xzx='CO'.$i;
+                            $s = "select * from design_ct where ctno='$ctno' && cid='$cid' && personID='$id' && co='$xzx' ORDER BY id DESC";
+                            $result = mysqli_query($con, $s);
+                            $num = mysqli_num_rows($result);
+                            $comark='0';
+                            $click='';
+                            if($num)
+                            { 
+                                $var = mysqli_fetch_assoc($result);
+                                $click='checked';
+                                $comark=$var['comark'];
+                                
+                            }
+
+                            ?><tr><td style=" text-align: center;">CO<?php echo $i ?></td>
+                                <div class="checkbox">
+                                    <td style="text-align: center;"><input type="checkbox"  <?php echo $click ?> class="largerCheckbox" value="CO<?php echo $i ?>" name="COS[]"></td>
+                                </div>
+
+                                <td style="text-align: center;"><input type="number" min="0" max="100" value=<?php echo $comark ?> name="totalCO<?php echo $i ?>"></td>
+                                </tr>
+                            <?php
+                        }
+                        ?>
+                            </table>
+
+                        </div>
+
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-success" name="ctsyllabusesign3">NEXT</button>
+
+                        </div>
+               </form>
+           </div>
+       </div>
+   </div>
+
+   <?php
+
+}
+
+if (isset($_POST["ctsyllabusesign3"]))
+{
+    echo '<script type="text/javascript">myFunction();</script>';
+    global $name;
+    global $con;
+
+    $cid = $_POST['cid'];
+    $ctno = $_POST['ctno'];
+    $COS = $_POST['COS'];
+    $topic=$_POST['topic'];
+
+    $coTotalMark[] = '';
+
+    for ($i = 0; $i < sizeof($COS); $i++) {
+        $coTotalMark["$COS[$i]"] = $_POST["total$COS[$i]"];
+    }
+    global $id;
+
+
+
+    for ($i = 0; $i < sizeof($COS); $i++)
+    {
+
+        $s = "select * from design_ct where ctno='$ctno' && cid='$cid' && personID='$id' && co='$COS[$i]' ORDER BY id DESC";
+         $result = mysqli_query($con, $s);
+        $num = mysqli_num_rows($result);
+        $x=$COS[$i];
+
+        if ($num == 0) 
+        {
+            $query = "INSERT INTO design_ct VALUES('','$id','$cid','$ctno','$COS[$i]',' $coTotalMark[$x]') ";
+            mysqli_query($con, $query);
+        } 
+        else {
+        $var = mysqli_fetch_assoc($result);
+        $newID = $var['id'];
+        
+        $query = "UPDATE design_ct SET comark='$coTotalMark[$x]'   WHERE id=$newID";
+        mysqli_query($con, $query);
+    }
+
+    }
+    $s = "select * from ct_topic where ctno='$ctno' && cid='$cid' && personID='$id' ORDER BY id DESC";
+    $result = mysqli_query($con, $s);
+    $num = mysqli_num_rows($result);
+   
+
+   if ($num == 0) 
+   {
+       $query = "INSERT INTO ct_topic VALUES('','$id','$cid','$ctno','$topic') ";
+       mysqli_query($con, $query);
+   } 
+   else {
+   $var = mysqli_fetch_assoc($result);
+   $newID = $var['id'];
+   
+   $query = "UPDATE ct_topic SET topic='$topic'  WHERE id=$newID";
+   mysqli_query($con, $query);
+   }
+
+   ?>
+   <div class="d-flex justify-content-center">
+       <div class="list">
+           <h3>Data Store successfully</h3>
+       </div>
+   </div>
+   <?php
+
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
  // _________________syllabus design________________

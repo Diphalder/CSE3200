@@ -842,7 +842,7 @@ if (isset($_POST["viewsyllabus3"]))
     $datatable = "course";
     $cid = $_POST['cid'];
     $personID=$_POST['personID'];
-?>
+    ?>
 
     <div class="d-flex justify-content-center">
         <div class="list">
