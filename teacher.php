@@ -441,7 +441,7 @@ if (isset($_POST["CTsyllabusdesign"]))
                    <br>
                    <br>
                    <div  >
-                       <button type="submit" class="btn btn-success btn-block" name="ctsyllabusview">View</button>
+                       <button type="submit" class="btn btn-success btn-block" name="ctsyllabusview">View all syllabus</button>
 
                    </div>
                    <br>
@@ -482,6 +482,16 @@ if (isset($_POST["CTsyllabusdesign"]))
    <?php
 
    }
+
+
+
+}
+
+if (isset($_POST["ctsyllabusview"]))
+{
+
+
+
 
 
 
@@ -1253,7 +1263,8 @@ if (isset($_POST["ctsyllabusesign3"]))
 
 
 
-    if (isset($_POST["codesign2"])) {
+    if (isset($_POST["codesign2"]))
+     {
         echo '<script type="text/javascript">myFunction();</script>';
         $cid = $_POST['course'];
 
