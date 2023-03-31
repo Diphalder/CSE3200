@@ -1065,7 +1065,6 @@ if (isset($_POST["viewPO2"]))
                         </div>
 
 
-
                         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
                         <script type="text/javascript">
                             google.charts.load('current', {
@@ -1078,23 +1077,21 @@ if (isset($_POST["viewPO2"]))
                                     ['CO', 'Number'],
                                     <?php
 
-                                    echo "['" . "PO-1" . "', " . $zzzz[1] . "],";
-                                    echo "['" . "PO-2" . "', " . $zzzz[2] . "],";
-                                    echo "['" . "PO-3" . "', " . $zzzz[3] . "],";
-                                    echo "['" . "PO-4" . "', " . $zzzz[4] . "],";
-                                    echo "['" . "PO-5" . "', " . $zzzz[5] . "],";
-                                    echo "['" . "PO-6" . "', " . $zzzz[6] . "],";
-                                    echo "['" . "PO-7" . "', " . $zzzz[7] . "],";
-                                    echo "['" . "PO-8" . "', " . $zzzz[8] . "],";
-                                    echo "['" . "PO-9" . "', " . $zzzz[9] . "],";
-                                    echo "['" . "PO-10" . "', " . $zzzz[10] . "],";
-                                    echo "['" . "PO-11" . "', " . $zzzz[11] . "],";
-                                    echo "['" . "PO-12" . "', " . $zzzz[12] . "],";
+                                    for($p=1;$p<=12;$p++)
+                                    {
+                                        $s =  "SELECT poname FROM po WHERE po='$p'";
+                                        $result = mysqli_query($con, $s);
+                                        $dvv = mysqli_fetch_assoc($result);
+                                        $poname=$dvv['poname'];
+                                        echo "['" . "$poname" . "', " . $zzzz[$p] . "],";
 
+                                    }
+
+                                
                                     ?>
                                 ]);
                                 var options = {
-                                    title: 'Percentage of Course-outcome',
+                                    title: 'Percentage of Program-outcome',
                                     //is3D:true,  
                                     pieHole: 0.4
                                 };
@@ -1107,10 +1104,18 @@ if (isset($_POST["viewPO2"]))
 
 
 
+
+
                         <?php
                     
                             for ($j = 1; $j <= 12; $j++) {
-                                $cozz[]  = "PO".$j;
+
+                                $s =  "SELECT poname FROM po WHERE po='$j'";
+                                $result = mysqli_query($con, $s);
+                                $dvv = mysqli_fetch_assoc($result);
+                                $poname=$dvv['poname'];
+
+                                $cozz[]  = $poname;
                                 $vall[] = $zzzz[$j];
                             }
                         
@@ -1127,7 +1132,7 @@ if (isset($_POST["viewPO2"]))
 
                         <body>
                             <div class="list" >
-                                <h2 class="page-header"> Course Outcome result analysis </h2>
+                                <h2 class="page-header"> Program Outcome result analysis </h2>
                                 <canvas id="chartjs_bar"></canvas>
                             </div>
                         </body>
@@ -1186,7 +1191,7 @@ if (isset($_POST["viewPO2"]))
                             });
                         </script>
 
-                        </html>
+                        
 
 
 

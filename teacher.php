@@ -366,7 +366,12 @@ if ($type != "Teacher") {
 
             <div class="btn-group">
                 <form method='post'>
-                    <button type="submit" class="btn btn-primary" name="co">Course Outcome</button>
+                    <button type="submit" class="btn btn-primary" name="co"> view Course Outcome</button>
+                </form>
+            </div>
+            <div class="btn-group">
+                <form method='post'>
+                    <button type="submit" class="btn btn-primary" name="viewPO">view Program Outcome</button>
                 </form>
             </div>
 
@@ -381,6 +386,519 @@ if ($type != "Teacher") {
 
 
     <?php
+
+
+
+
+
+if (isset($_POST["viewPO"])) 
+{
+    echo '<script type="text/javascript">myFunction();</script>';
+
+    global $id, $con;
+    $s = "SELECT distinct(courselist.cid) , courselist.ccode , courselist.cname FROM courselist, course WHERE courselist.cid = course.cid and course.personID=$id and courselist.type ='Theory' or courselist.type ='Lab' ";
+
+    $result = mysqli_query($con, $s);
+    $num = mysqli_num_rows($result);
+    if ($num != 0) {
+
+    ?>
+
+        <div class="d-flex justify-content-center">
+            <div class="list">
+                <h3 style="text-align: center;"> Course Outcome </h3>
+                <form method='post'>
+                    <div>
+                        <label>Course Code</label>
+                        <select class="form-control" name="course" required>
+                            <?php
+                            global $id, $con;
+                            $s = "SELECT distinct(courselist.cid) , courselist.ccode , courselist.cname FROM courselist, course WHERE courselist.cid = course.cid and course.personID=$id and courselist.type ='Theory' or courselist.type ='Lab' ";
+
+                            $result = mysqli_query($con, $s);
+                            $num = mysqli_num_rows($result);
+
+                            while ($var = mysqli_fetch_assoc($result)) { ?><option value="<?php echo $var['cid'] ?>"><?php echo $var['ccode'] . '  [' . $var['cname'] . ']' ?></option>
+
+                            <?php
+                            }
+
+                            ?>
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label>Roll range</label>
+                        <input type="text" name="rollStart" class="form-control" required>
+                        <br>
+                        <input type="text" name="rollEnd" class="form-control" required>
+                    </div>
+                    <div class="d-flex justify-content-end">
+
+                        <button type="submit" class="btn btn-success" name="viewPO2">NEXT</button>
+
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    <?php
+
+
+    } else {
+    ?>
+
+        <div class="d-flex justify-content-center">
+
+            <div class='list'>
+                <div class="minibox">
+                    <h3>No Course are available</h3>
+
+                </div>
+                <div class="minibox">
+                    <div class="form-group">
+                        <form method='post'>
+                            <button type="submit" class="btn btn-success btn-block " name="addCourse">Add Course</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    <?php
+
+
+    }
+}
+if (isset($_POST["viewPO2"])) 
+{
+
+    echo '<script type="text/javascript">myFunction();</script>';
+
+   
+
+    $rollStart = $_POST['rollStart'];
+    $rollEnd = $_POST['rollEnd'];
+    $cid = $_POST['course'];
+
+
+
+        ?>
+            <div class='container'>
+                <div class="d-flex justify-content-center">
+                    <div class="list">
+
+
+                        <div class="d-flex justify-content-center">
+                            <div class="list">
+
+                                <h3 style="text-align: center;"> Course outcome result </h3>
+                    
+                                <table class="table table-striped table-bordered"">
+                         <tr>
+                        <td>
+                            <h5>Roll</h5>
+
+                        </td>
+                        <td>
+                            <h5>avg PO</h5>
+                        </td>
+                        <td></td>
+                        <td></td>
+                       
+                        <td>
+                            <h5>PO-1</h5>
+                        </td>
+                        <td>
+                            <h5>PO-2</h5>
+                        </td>
+                        <td>
+                            <h5>PO-3</h5>
+                        </td>
+                        <td>
+                            <h5>PO-4</h5>
+                        </td>
+                        <td>
+                            <h5>PO-5</h5>
+                        </td>
+                        <td>
+                            <h5>PO-6</h5>
+                        </td>
+                        <td>
+                            <h5>PO-7</h5>
+                        </td>
+                        <td>
+                            <h5>PO-8</h5>
+                        </td>
+                        <td>
+                            <h5>PO-9</h5>
+                        </td>
+                        <td>
+                            <h5>PO-10</h5>
+                        </td>
+                        <td>
+                            <h5>PO-11</h5>
+                        </td>
+                        <td>
+                            <h5>PO-12</h5>
+                        </td>
+                        
+               
+            </tr>
+
+    <?php
+
+
+            $totalco[0] = 0;
+            $totalco[1] = 0;
+
+
+
+            for ($i = $rollStart; $i <= $rollEnd; $i++) {
+                echo "<tr>";
+                echo "<td>$i</td>";
+
+                $s = "SELECT SUM(co.mark) as mark , SUM(co.fullmark) as fullmark FROM co, copo WHERE co.cid=copo.cid and co.cid='$cid' and  CONCAT('co',copo.co)=co.cono and co.roll='$i'  and copo.personid='$id' ;";
+                
+                $result = mysqli_query($con, $s);
+                $dvv = mysqli_fetch_assoc($result);
+                $numm = mysqli_num_rows($result);
+                if($numm)
+                {
+                    $fullmark = $dvv['fullmark'];
+                    $mark = $dvv['mark'];
+
+                }
+                else
+                {
+                    $fullmark =0;
+                    $mark =0;
+                }
+
+                
+
+                if ($fullmark == 0) {
+                    $per = '0';
+                } else {
+                    $per = ($mark * 100) / $fullmark;
+                }
+
+                $per = round($per, 2);
+
+    ?>
+                        <td>
+                            <div class=" progress">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $per ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $per ?>%">
+                                    </div>
+                            </div>
+                            <?php echo "$per%"; ?>
+                            </td>
+                            <td></td>
+                            <td></td>
+
+                            <?php
+
+
+
+
+                            for ($j = 1; $j <= 12; $j++) {
+                                $po = "po".$j;
+                                $s =  "SELECT SUM(co.mark) as mark , SUM(co.fullmark) as fullmark FROM co, copo WHERE co.cid=copo.cid and co.cid='$cid' and  CONCAT('co',copo.co)=co.cono and co.roll='$i' and $po='1'  and  copo.personid='$id'  ;";
+                                $result = mysqli_query($con, $s);
+                                $dvv = mysqli_fetch_assoc($result);
+                                
+                                $numm = mysqli_num_rows($result);
+                                if($numm)
+                                {
+                                    $fullmark = $dvv['fullmark'];
+                                    $mark = $dvv['mark'];
+                                }
+                                else
+                                {
+                                    $fullmark =0;
+                                    $mark =0;
+                                }
+                                
+                                
+                                if ($fullmark == 0) {
+                                    $perr = '0';
+                                } else {
+                                    $perr = ($mark * 100) / $fullmark;
+                                    $totalco[0] += $mark;
+                                    $totalco[1] += $fullmark;
+                                }
+
+                                $perr = round($perr, 2);
+
+
+                            ?>
+
+
+                                <td>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $perr ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $perr ?>%">
+                                        </div>
+                                    </div>
+                                    <?php echo "$perr%"; ?>
+                                </td>
+                            <?php
+
+
+                            }
+
+
+
+                            ?>
+                            </tr>
+                        <?php
+
+                    }
+
+                        ?>
+                        </table>
+                        <div class="list">
+                            <?php
+
+                            if ($totalco[1] == 0) {
+                                $totalper = '0';
+                            } else {
+                                $totalper = ($totalco[0] * 100) /  $totalco[1];
+                            }
+
+
+                            $totalper = round($totalper, 2);
+
+                            ?>
+                            <h3>Total Avg. performance of all is <?php echo $totalper ?>%</h3>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $totalper ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $totalper ?>%">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="list">
+                        <!--<h3>Avg. performance of </h3> -->
+                            <table class="table table-striped table-bordered" style="text-align: center;">
+
+                                <?php
+                                $zzzz[] = "";
+
+
+
+                                for ($j = 1; $j <= 12; $j++) {
+                                    $totalco[0] = 0;
+                                    $totalco[1] = 0;
+
+                                    for ($i = $rollStart; $i <= $rollEnd; $i++) {
+                                        $po = "po".$j;
+                                        $s =  "SELECT SUM(co.mark) as mark , SUM(co.fullmark) as fullmark FROM co, copo WHERE co.cid=copo.cid and co.cid='$cid' and  CONCAT('co',copo.co)=co.cono and co.roll='$i' and $po='1'  and copo.personid='$id' ;";
+                                        $result = mysqli_query($con, $s);
+                                        $dvv = mysqli_fetch_assoc($result);
+                                        
+                                        $numm = mysqli_num_rows($result);
+                                        if($numm)
+                                        {
+                                            $fullmark = $dvv['fullmark'];
+                                            $mark = $dvv['mark'];
+                                        }
+                                        else
+                                        {
+                                            $fullmark =0;
+                                            $mark =0;
+                                        }
+                                        
+                                        if ($fullmark == 0) {
+                                        } 
+                                        else {
+
+                                            $totalco[0] += $mark;
+                                            $totalco[1] += $fullmark;
+                                        }
+                                    }
+
+                                    if ($totalco[1] == 0) {
+                                        $tper = '0';
+                                    } else {
+                                        $tper = ($totalco[0] * 100) /  $totalco[1];
+                                    }
+
+                                    $tper = round($tper, 2);
+                                    $zzzz[$j] = $tper;
+
+                                ?>
+                                    <!-- <tr>
+                                        <td>CO<?php echo $j ?></td>
+                                        <td><?php echo $tper ?>%
+                                            <div class="progress">
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $tper ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $tper ?>%">
+                                     
+                                        </div>
+                                            </div>
+                                        </td>
+
+                                    </tr> -->  
+
+                                <?php
+
+
+                                }
+
+
+
+                                ?>
+                            </table>
+
+                        </div>
+
+
+                        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                        <script type="text/javascript">
+                            google.charts.load('current', {
+                                'packages': ['corechart']
+                            });
+                            google.charts.setOnLoadCallback(drawChart);
+
+                            function drawChart() {
+                                var data = google.visualization.arrayToDataTable([
+                                    ['CO', 'Number'],
+                                    <?php
+
+                                    for($p=1;$p<=12;$p++)
+                                    {
+                                        $s =  "SELECT poname FROM po WHERE po='$p'";
+                                        $result = mysqli_query($con, $s);
+                                        $dvv = mysqli_fetch_assoc($result);
+                                        $poname=$dvv['poname'];
+                                        echo "['" . "$poname" . "', " . $zzzz[$p] . "],";
+
+                                    }
+
+                                
+                                    ?>
+                                ]);
+                                var options = {
+                                    title: 'Percentage of Program-outcome',
+                                    //is3D:true,  
+                                    pieHole: 0.4
+                                };
+                                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                                chart.draw(data, options);
+                            }
+                        </script>
+
+                        <div id="piechart" style="width: 900px; height: 500px;"></div>
+
+
+
+
+
+                        <?php
+                    
+                            for ($j = 1; $j <= 12; $j++) {
+
+                                $s =  "SELECT poname FROM po WHERE po='$j'";
+                                $result = mysqli_query($con, $s);
+                                $dvv = mysqli_fetch_assoc($result);
+                                $poname=$dvv['poname'];
+
+                                $cozz[]  = $poname;
+                                $vall[] = $zzzz[$j];
+                            }
+                        
+
+
+                        ?>
+                       
+
+                        <head>
+                            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <title>Graph</title>
+                        </head>
+
+                        <body>
+                            <div class="list" >
+                                <h2 class="page-header"> Program Outcome result analysis </h2>
+                                <canvas id="chartjs_bar"></canvas>
+                            </div>
+                        </body>
+
+
+
+                        <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+                        <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+                        <script type="text/javascript">
+                            var ctx = document.getElementById("chartjs_bar").getContext('2d');
+                            var myChart = new Chart(ctx, {
+                                type: 'bar',
+                                data: {
+                                    labels: <?php echo json_encode($cozz); ?>,
+                                    datasets: [{
+                                        backgroundColor: [
+                                            "#5969ff",
+                                            "#ff407b",
+                                            "#25d5f2",
+                                            "#ffc750",
+                                            "#2ec551",
+                                            "#7040fa",
+                                            "#ff004e",
+                                            "#5969ff",
+                                            "#ff407b",
+                                            "#25d5f2",
+                                            "#ffc750",
+                                            "#2ec551",
+                                            "#7040fa",
+                                            "#ff004e",
+                                            "#5969ff",
+                                            "#ff407b",
+                                            "#25d5f2",
+                                            "#ffc750",
+                                            "#2ec551",
+                                            "#7040fa",
+                                            "#ff004e"
+                                        ],
+                                        data: <?php echo json_encode($vall); ?>,
+                                    }]
+                                },
+                                options: {
+                                    legend: {
+                                        display: true,
+                                        position: 'bottom',
+
+                                        labels: {
+                                            fontColor: '#71748d',
+                                            fontFamily: 'Circular Std Book',
+                                            fontSize: 14,
+                                        }
+                                    },
+
+
+                                }
+                            });
+                        </script>
+
+                        
+
+
+
+
+
+
+                        </div>
+
+                    </div><?php
+
+
+
+    
+
+
+
+
+}
 
 
 
@@ -1815,7 +2333,7 @@ if (isset($_POST["ctsyllabusesign3"]))
 
                 $datatable = 'marks';
                 ?>
-        <div class="d-flex justify-content-center">
+              <div class="d-flex justify-content-center">
             <div class="list">
                 <div class="d-flex justify-content-end">
 
@@ -1868,6 +2386,13 @@ if (isset($_POST["ctsyllabusesign3"]))
                     $totalco[3] = 0;
                     $totalco[4] = 0;
                     $totalco[5] = 0;
+
+                    $valid[1]=0;
+                    $valid[2]=0;
+                    $valid[3]=0;
+                    $valid[4]=0;
+                    $valid[5]=0;
+
                     for ($i = $rollStart; $i <= $rollEnd; $i++) {
                         echo "<tr>";
                         echo "<td>$i</td>";
@@ -1888,7 +2413,7 @@ if (isset($_POST["ctsyllabusesign3"]))
                         $totalper += $per;
 
                         $per = round($per, 2);
-
+                        
 
                     ?>
 
@@ -1921,7 +2446,10 @@ if (isset($_POST["ctsyllabusesign3"]))
                             } else {
                                 $perr = ($mark * 100) / $fullmark;
                             }
-
+                            if($per>=60)
+                            {
+                                $valid[$j]++;
+                            }
 
                             $perr = round($perr, 2);
                             $totalco[$j] += $perr;
@@ -1946,8 +2474,6 @@ if (isset($_POST["ctsyllabusesign3"]))
                         </tr>
                     <?php
 
-
-
                     }
 
 
@@ -1955,6 +2481,100 @@ if (isset($_POST["ctsyllabusesign3"]))
 
                     ?>
                 </table>
+
+
+                
+                
+                
+                
+                <div class="list">
+
+                <?php
+                $totalstudent= ($rollEnd - $rollStart + 1);
+
+                        for ($j = 1; $j <= 5; $j++) {
+                    
+                            $ccozz[]  = 'CO'.$j.' [Passed] %';
+                            $vvall[] = (($valid[$j])*100)/$totalstudent;
+
+                            $ccozz[]  = 'CO'.$j.' [Failed] %';
+                            $vvall[] = (($totalstudent-$valid[$j])*100)/$totalstudent;
+
+                        }
+
+                       
+
+                        ?>
+                       
+
+                        <head>
+                            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <title>Graph</title>
+                        </head>
+
+                        <body>
+                            <div class="list" >
+                                <h2 class="page-header"> Course Outcome Achieved </h2>
+                                <canvas id="chartjs_bar"></canvas>
+                            </div>
+                        </body>
+
+
+
+                        <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+                        <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+                        <script type="text/javascript">
+                            var ctx = document.getElementById("chartjs_bar").getContext('2d');
+                            var myChart = new Chart(ctx, {
+                                type: 'bar',
+                                data: {
+                                    labels: <?php echo json_encode($ccozz); ?>,
+                                    datasets: [{
+                                        backgroundColor: [
+                                            "#2ec551",
+                                            "#ff407b",
+                                            "#2ec551",
+                                            "#ff407b",
+                                            "#2ec551",
+                                            "#ff407b",
+                                            "#2ec551",
+                                            "#ff407b",
+                                            "#2ec551",
+                                            "#ff407b",
+                                            "#2ec551",
+                                            "#ff407b"
+                                            
+                                        ],
+                                        data: <?php echo json_encode($vvall); ?>,
+                                    }]
+                                },
+                                options: {
+                                    legend: {
+                                        display: true,
+                                        position: 'bottom',
+
+                                        labels: {
+                                            fontColor: '#71748d',
+                                            fontFamily: 'Circular Std Book',
+                                            fontSize: 14,
+                                        }
+                                    },
+
+
+                                }
+                            });
+                        </script>
+            
+
+                </div>
+
+
+
+
+
+
+
                 <div class="list">
                     <?php $totalper = round($totalper, 2);
                     $totalper /= ($rollEnd - $rollStart + 1);
@@ -1971,7 +2591,7 @@ if (isset($_POST["ctsyllabusesign3"]))
 
                 <div class="list">
                     <h3>Avg. performance of </h3>
-                    <table class="table table-striped table-bordered" style="text-align: center;">
+                
 
                         <?php
 
@@ -1980,25 +2600,84 @@ if (isset($_POST["ctsyllabusesign3"]))
                             $totalco[$j] /= ($rollEnd - $rollStart + 1);
                             $totalco[$j] = round($totalco[$j], 2);
 
-                        ?>
-                            <tr>
-                                <td>CO<?php echo $j ?></td>
-                                <td><?php echo $totalco[$j] ?>%
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $totalco[$j] ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $totalco[$j] ?>%">
-                                        </div>
-                                    </div>
-                                </td>
-
-                            </tr>
-
-                        <?php
-
+                            $cozz[]  = 'CO'.$j;
+                            $vall[] =$totalco[$j];
 
                         }
 
+                       
+
                         ?>
-                    </table>
+                       
+
+                        <head>
+                            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <title>Graph</title>
+                        </head>
+
+                        <body>
+                            <div class="list" >
+                                <h2 class="page-header"> Course Outcome result analysis </h2>
+                                <canvas id="chartjs_bar2"></canvas>
+                            </div>
+                        </body>
+
+
+
+                        <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+                        <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+                        <script type="text/javascript">
+                            var ctx = document.getElementById("chartjs_bar2").getContext('2d');
+                            var myChart = new Chart(ctx, {
+                                type: 'bar',
+                                data: {
+                                    labels: <?php echo json_encode($cozz); ?>,
+                                    datasets: [{
+                                        backgroundColor: [
+                                            "#5969ff",
+                                            "#ff407b",
+                                            "#25d5f2",
+                                            "#ffc750",
+                                            "#2ec551",
+                                            "#7040fa",
+                                            "#ff004e",
+                                            "#5969ff",
+                                            "#ff407b",
+                                            "#25d5f2",
+                                            "#ffc750",
+                                            "#2ec551",
+                                            "#7040fa",
+                                            "#ff004e",
+                                            "#5969ff",
+                                            "#ff407b",
+                                            "#25d5f2",
+                                            "#ffc750",
+                                            "#2ec551",
+                                            "#7040fa",
+                                            "#ff004e"
+                                        ],
+                                        data: <?php echo json_encode($vall); ?>,
+                                    }]
+                                },
+                                options: {
+                                    legend: {
+                                        display: true,
+                                        position: 'bottom',
+
+                                        labels: {
+                                            fontColor: '#71748d',
+                                            fontFamily: 'Circular Std Book',
+                                            fontSize: 14,
+                                        }
+                                    },
+
+
+                                }
+                            });
+                        </script>
+
+                
 
 
                 </div>
