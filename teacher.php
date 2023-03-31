@@ -489,6 +489,95 @@ if (isset($_POST["CTsyllabusdesign"]))
 
 if (isset($_POST["ctsyllabusview"]))
 {
+    echo '<script type="text/javascript">myFunction();</script>';
+    $cid = $_POST['course'];
+
+    ?>
+
+    <div class="d-flex justify-content-center">
+  
+
+        <div class="list">
+        <div class="list">
+        <h4 style=" text-align: center;">Class Test syllabus</h4>
+        <?php
+         $s = "SELECT distinct(courselist.cid) , courselist.ccode , courselist.cname FROM courselist, course WHERE courselist.cid = course.cid and course.personID=$id and courselist.type in('Theory','Lab')";
+         $result = mysqli_query($con, $s);
+         $num = mysqli_num_rows($result);
+         $var = mysqli_fetch_assoc($result);
+         $ccode=$var['ccode'];
+         $cname=$var['cname'];
+         
+
+
+        ?>
+         <h6 style=" text-align: center;">Course Code :  <?php echo  $ccode ?> </h6>
+         <h6 style=" text-align: center;">Course Name :  <?php echo  $cname ?> </h6>
+            </div>
+            <table class="table table-striped table-bordered" ">
+            <tr>
+            <td>CT no.</td>
+            <td>Topic</td> 
+            <td colspan="5">CO mark distribution</td> 
+            </tr>
+            <?php
+
+        for ($ctno = 1; $ctno <= 4; $ctno++)
+        {
+            $s = "select * from ct_topic where ctno='$ctno' && cid='$cid' && personID='$id' ORDER BY id DESC";
+            $result = mysqli_query($con, $s);
+            $num = mysqli_num_rows($result);
+            $topic='';
+ 
+            if($num)
+            {
+                $var = mysqli_fetch_assoc($result);
+                $topic=$var['topic'];
+                          
+            }
+                         
+             ?>
+             <tr>
+            <td><?php echo  $ctno ?></td> 
+             <td><?php echo  $topic ?></td> 
+                            
+                 <?php
+                          
+                 for ($i = 1; $i <= 5; $i++) 
+                 { 
+                      $xzx='CO'.$i;
+                     $s = "select * from design_ct where ctno='$ctno' && cid='$cid' && personID='$id' && co='$xzx' ORDER BY id DESC";
+                     $result = mysqli_query($con, $s);
+                      $num = mysqli_num_rows($result);
+                      $comark='0';
+                    
+                         if($num)
+                        { 
+                             $var = mysqli_fetch_assoc($result);
+                    
+                             $comark=$var['comark'];
+
+                             ?><td style=" text-align: center;">CO<?php echo $i ?>[ <?php echo $comark ?> ]</td>
+                        
+                            <?php
+                             
+                        }
+      
+                    }
+                    ?>
+             </tr>
+             <?php
+        }
+
+
+        ?>
+                       
+    
+    </div>
+ 
+    <?php
+
+
 
 
 
