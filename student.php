@@ -971,6 +971,7 @@ if (isset($_POST["viewsyllabus3"]))
      <h6 style=" text-align: center;">Course Code :  <?php echo  $ccode ?> </h6>
      <h6 style=" text-align: center;">Course Name :  <?php echo  $cname ?> </h6>
         </div>
+        <div class="list">
         <table class="table table-striped table-bordered" ">
         <tr>
         <td>CT no.</td>
@@ -1026,6 +1027,7 @@ if (isset($_POST["viewsyllabus3"]))
 
     ?>
         </table>
+        </div>
                    
 
 </div>
@@ -1062,7 +1064,6 @@ if (isset($_POST["viewsyllabus3"]))
      $ccode=$var['ccode'];
      $cname=$var['cname'];
      
-
 
     ?>
      <h6 style=" text-align: center;">Course Code :  <?php echo  $ccode ?> </h6>
