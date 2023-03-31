@@ -679,6 +679,12 @@ if (isset($_POST["viewprofile"]))
                 </form>
             </div>
 
+            <div class="btn-group">
+                <form method='post'>
+                    <button type="submit" class="btn btn-primary" name="viewPO">view Program Outcome</button>
+                </form>
+            </div>
+
             <div onclick="myFunction()" class="btn-group">
                 <form method='post'>
                     <button type="submit" class="btn btn-primary" name="viewResult1">view Result</button>
@@ -698,6 +704,520 @@ if (isset($_POST["viewprofile"]))
 
 
     <?php
+
+
+
+
+// __________ view program outcome___________
+
+
+
+
+if (isset($_POST["viewPO"])) 
+{
+        echo '<script type="text/javascript">myFunction();</script>';
+        ?>
+        <div class="d-flex justify-content-center">
+            <div class="list">
+                <form method='post'>
+
+                    <div>
+                        <label>Year</label>
+                        <select class="form-control" name="year">
+                            <option value='1st'> 1st year </option>
+                            <option value='2nd'> 2nd year </option>
+                            <option value='3rd'> 3rd year </option>
+                            <option value='4th'> 4th year </option>
+                        </select>
+
+                    </div>
+                    <div>
+                        <label>Semester</label>
+                        <select class="form-control" name="sem">
+                            <option value='odd'> Odd </option>
+                            <option value='even'> Even </option>
+                        </select>
+
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-success" name="viewPO2">NEXT</button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        <?php
+
+
+}
+
+
+
+if (isset($_POST["viewPO2"])) 
+{
+        echo '<script type="text/javascript">myFunction();</script>';
+
+        if ($roll != '') {
+
+
+            $year = $_POST['year'];
+            $sem = $_POST['sem'];
+
+
+            $_SESSION['year'] = $year;
+            $_SESSION['sem'] = $sem;
+
+
+            $datatableCourse = "course";
+            $s = "SELECT courselist.cid, courselist.ccode, courselist.cname FROM courselist,student WHERE student.deptid=courselist.deptid and courselist.year='$year' and courselist.semester='$sem' and student.id =$id and  courselist.type='Theory'; ";
+            $result = mysqli_query($con, $s);
+            $number = mysqli_num_rows($result);
+
+
+            $courses = array($number);
+
+            $i = 0;
+            while ($var = mysqli_fetch_assoc($result)) {
+                $cid[$i] = $var['cid'];
+                $ccccc = $cid[$i];
+                $ds = "SELECT * From courselist WHERE cid=$ccccc";
+                $dr = mysqli_query($con, $ds);
+                $dv = mysqli_fetch_assoc($dr);
+                $course[$i] = $dv['ccode'];
+                $i++;
+            }
+
+
+
+        ?>
+            <div class='container'>
+                <div class="d-flex justify-content-center">
+                    <div class="list">
+
+
+                        <div class="d-flex justify-content-center">
+                            <div class="list">
+
+
+                                <h3 style="text-align: center;"> Course outcome result </h3>
+                                <h5 style="text-align: center;">Dept code : <?php echo $deptcode ?></h5>
+                                <h5 style="text-align: center;"> Dept name : <?php echo $deptname ?></h5>
+                                <h5 style="text-align: center;">Year : <?php echo $year ?></h5>
+                                <h5 style="text-align: center;">Semester : <?php echo $sem ?></h5>
+                                <table class="table table-striped table-bordered"">
+            <tr>
+                        <td>
+                            <h5>Course Code</h5>
+
+                        </td>
+                        <td>
+                            <h5>avg PO</h5>
+                        </td>
+                        <td></td>
+                        <td></td>
+                       
+                        <td>
+                            <h5>PO-1</h5>
+                        </td>
+                        <td>
+                            <h5>PO-2</h5>
+                        </td>
+                        <td>
+                            <h5>PO-3</h5>
+                        </td>
+                        <td>
+                            <h5>PO-4</h5>
+                        </td>
+                        <td>
+                            <h5>PO-5</h5>
+                        </td>
+                        <td>
+                            <h5>PO-6</h5>
+                        </td>
+                        <td>
+                            <h5>PO-7</h5>
+                        </td>
+                        <td>
+                            <h5>PO-8</h5>
+                        </td>
+                        <td>
+                            <h5>PO-9</h5>
+                        </td>
+                        <td>
+                            <h5>PO-10</h5>
+                        </td>
+                        <td>
+                            <h5>PO-11</h5>
+                        </td>
+                        <td>
+                            <h5>PO-12</h5>
+                        </td>
+                        
+               
+            </tr>
+
+    <?php
+
+
+            $totalco[0] = 0;
+            $totalco[1] = 0;
+
+
+
+            for ($i = 0; $i < $number; $i++) {
+                echo "<tr>";
+                echo "<td>$course[$i]</td>";
+
+                $s = "SELECT SUM(co.mark) as mark , SUM(co.fullmark) as fullmark FROM co, copo WHERE co.cid=copo.cid and co.cid='$cid[$i]' and  CONCAT('co',copo.co)=co.cono and co.roll='$roll'  GROUP by copo.personid ORDER by copo.id DESC ;";
+                
+                $result = mysqli_query($con, $s);
+                $dvv = mysqli_fetch_assoc($result);
+                $numm = mysqli_num_rows($result);
+                if($numm)
+                {
+                    $fullmark = $dvv['fullmark'];
+                    $mark = $dvv['mark'];
+
+                }
+                else
+                {
+                    $fullmark =0;
+                    $mark =0;
+                }
+
+                
+
+                if ($fullmark == 0) {
+                    $per = '0';
+                } else {
+                    $per = ($mark * 100) / $fullmark;
+                }
+
+                $per = round($per, 2);
+
+    ?>
+                        <td>
+                            <div class=" progress">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $per ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $per ?>%">
+                                    </div>
+                            </div>
+                            <?php echo "$per%"; ?>
+                            </td>
+                            <td></td>
+                            <td></td>
+
+                            <?php
+
+
+
+
+                            for ($j = 1; $j <= 12; $j++) {
+                                $po = "po".$j;
+                                $s =  "SELECT SUM(co.mark) as mark , SUM(co.fullmark) as fullmark FROM co, copo WHERE co.cid=copo.cid and co.cid='$cid[$i]' and  CONCAT('co',copo.co)=co.cono and co.roll='$roll' and $po='1'  GROUP by copo.personid ORDER by copo.id DESC ;";
+                                $result = mysqli_query($con, $s);
+                                $dvv = mysqli_fetch_assoc($result);
+                                
+                                $numm = mysqli_num_rows($result);
+                                if($numm)
+                                {
+                                    $fullmark = $dvv['fullmark'];
+                                    $mark = $dvv['mark'];
+                                }
+                                else
+                                {
+                                    $fullmark =0;
+                                    $mark =0;
+                                }
+                                
+                                
+                                if ($fullmark == 0) {
+                                    $perr = '0';
+                                } else {
+                                    $perr = ($mark * 100) / $fullmark;
+                                    $totalco[0] += $mark;
+                                    $totalco[1] += $fullmark;
+                                }
+
+                                $perr = round($perr, 2);
+
+
+                            ?>
+
+
+                                <td>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $perr ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $perr ?>%">
+                                        </div>
+                                    </div>
+                                    <?php echo "$perr%"; ?>
+                                </td>
+                            <?php
+
+
+                            }
+
+
+
+                            ?>
+                            </tr>
+                        <?php
+
+                    }
+
+                        ?>
+                        </table>
+                        <div class="list">
+                            <?php
+
+                            if ($totalco[1] == 0) {
+                                $totalper = '0';
+                            } else {
+                                $totalper = ($totalco[0] * 100) /  $totalco[1];
+                            }
+
+
+                            $totalper = round($totalper, 2);
+
+                            ?>
+                            <h3>Total Avg. performance of all is <?php echo $totalper ?>%</h3>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $totalper ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $totalper ?>%">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="list">
+                        <!--<h3>Avg. performance of </h3> -->
+                            <table class="table table-striped table-bordered" style="text-align: center;">
+
+                                <?php
+                                $zzzz[] = "";
+
+
+
+                                for ($j = 1; $j <= 12; $j++) {
+                                    $totalco[0] = 0;
+                                    $totalco[1] = 0;
+
+                                    for ($i = 0; $i < $number; $i++) {
+                                        $po = "po".$j;
+                                        $s =  "SELECT SUM(co.mark) as mark , SUM(co.fullmark) as fullmark FROM co, copo WHERE co.cid=copo.cid and co.cid='$cid[$i]' and  CONCAT('co',copo.co)=co.cono and co.roll='$roll' and $po='1'  GROUP by copo.personid ORDER by copo.id DESC ;";
+                                        $result = mysqli_query($con, $s);
+                                        $dvv = mysqli_fetch_assoc($result);
+                                        
+                                        $numm = mysqli_num_rows($result);
+                                        if($numm)
+                                        {
+                                            $fullmark = $dvv['fullmark'];
+                                            $mark = $dvv['mark'];
+                                        }
+                                        else
+                                        {
+                                            $fullmark =0;
+                                            $mark =0;
+                                        }
+                                        
+                                        if ($fullmark == 0) {
+                                        } 
+                                        else {
+
+                                            $totalco[0] += $mark;
+                                            $totalco[1] += $fullmark;
+                                        }
+                                    }
+
+                                    if ($totalco[1] == 0) {
+                                        $tper = '0';
+                                    } else {
+                                        $tper = ($totalco[0] * 100) /  $totalco[1];
+                                    }
+
+                                    $tper = round($tper, 2);
+                                    $zzzz[$j] = $tper;
+
+                                ?>
+                                    <!-- <tr>
+                                        <td>CO<?php echo $j ?></td>
+                                        <td><?php echo $tper ?>%
+                                            <div class="progress">
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $tper ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $tper ?>%">
+                                     
+                                        </div>
+                                            </div>
+                                        </td>
+
+                                    </tr> -->  
+
+                                <?php
+
+
+                                }
+
+
+
+                                ?>
+                            </table>
+
+                        </div>
+
+
+
+                        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                        <script type="text/javascript">
+                            google.charts.load('current', {
+                                'packages': ['corechart']
+                            });
+                            google.charts.setOnLoadCallback(drawChart);
+
+                            function drawChart() {
+                                var data = google.visualization.arrayToDataTable([
+                                    ['CO', 'Number'],
+                                    <?php
+
+                                    echo "['" . "PO-1" . "', " . $zzzz[1] . "],";
+                                    echo "['" . "PO-2" . "', " . $zzzz[2] . "],";
+                                    echo "['" . "PO-3" . "', " . $zzzz[3] . "],";
+                                    echo "['" . "PO-4" . "', " . $zzzz[4] . "],";
+                                    echo "['" . "PO-5" . "', " . $zzzz[5] . "],";
+                                    echo "['" . "PO-6" . "', " . $zzzz[6] . "],";
+                                    echo "['" . "PO-7" . "', " . $zzzz[7] . "],";
+                                    echo "['" . "PO-8" . "', " . $zzzz[8] . "],";
+                                    echo "['" . "PO-9" . "', " . $zzzz[9] . "],";
+                                    echo "['" . "PO-10" . "', " . $zzzz[10] . "],";
+                                    echo "['" . "PO-11" . "', " . $zzzz[11] . "],";
+                                    echo "['" . "PO-12" . "', " . $zzzz[12] . "],";
+
+                                    ?>
+                                ]);
+                                var options = {
+                                    title: 'Percentage of Course-outcome',
+                                    //is3D:true,  
+                                    pieHole: 0.4
+                                };
+                                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                                chart.draw(data, options);
+                            }
+                        </script>
+
+                        <div id="piechart" style="width: 900px; height: 500px;"></div>
+
+
+
+                        <?php
+                    
+                            for ($j = 1; $j <= 12; $j++) {
+                                $cozz[]  = "PO".$j;
+                                $vall[] = $zzzz[$j];
+                            }
+                        
+
+
+                        ?>
+                       
+
+                        <head>
+                            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <title>Graph</title>
+                        </head>
+
+                        <body>
+                            <div class="list" >
+                                <h2 class="page-header"> Course Outcome result analysis </h2>
+                                <canvas id="chartjs_bar"></canvas>
+                            </div>
+                        </body>
+
+
+
+                        <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+                        <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+                        <script type="text/javascript">
+                            var ctx = document.getElementById("chartjs_bar").getContext('2d');
+                            var myChart = new Chart(ctx, {
+                                type: 'bar',
+                                data: {
+                                    labels: <?php echo json_encode($cozz); ?>,
+                                    datasets: [{
+                                        backgroundColor: [
+                                            "#5969ff",
+                                            "#ff407b",
+                                            "#25d5f2",
+                                            "#ffc750",
+                                            "#2ec551",
+                                            "#7040fa",
+                                            "#ff004e",
+                                            "#5969ff",
+                                            "#ff407b",
+                                            "#25d5f2",
+                                            "#ffc750",
+                                            "#2ec551",
+                                            "#7040fa",
+                                            "#ff004e",
+                                            "#5969ff",
+                                            "#ff407b",
+                                            "#25d5f2",
+                                            "#ffc750",
+                                            "#2ec551",
+                                            "#7040fa",
+                                            "#ff004e"
+                                        ],
+                                        data: <?php echo json_encode($vall); ?>,
+                                    }]
+                                },
+                                options: {
+                                    legend: {
+                                        display: true,
+                                        position: 'bottom',
+
+                                        labels: {
+                                            fontColor: '#71748d',
+                                            fontFamily: 'Circular Std Book',
+                                            fontSize: 14,
+                                        }
+                                    },
+
+
+                                }
+                            });
+                        </script>
+
+                        </html>
+
+
+
+
+
+
+                        </div>
+
+                    </div><?php
+
+
+
+
+
+
+
+
+
+
+                        } else {
+                            ?>
+                    <div class=" d-flex justify-content-center">
+                        <div class="list">
+                            <h3>Please add Roll number</h3>
+                        </div>
+                    </div>
+                <?php
+
+
+                        }
+}
 
 
 //______________view  syllabus______________
@@ -948,9 +1468,9 @@ if (isset($_POST["viewsyllabus3"]))
 
 
 
-?>
+        ?>
 
-<div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center">
 
 
     <div class="list">
@@ -1030,10 +1550,10 @@ if (isset($_POST["viewsyllabus3"]))
         </div>
                    
 
-</div>
-</div>
+    </div>
+    </div>
 
-<?php
+    <?php
 
 
 

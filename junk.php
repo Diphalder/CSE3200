@@ -377,4 +377,6 @@ document.getElementById("demo").innerHTML = "<?php ?><div>
     }
 
 
- 
+    SELECT SUM(co.mark) as mark , SUM(co.fullmark) as fullmark FROM co, copo WHERE co.cid=copo.cid and  CONCAT('co',copo.co)=co.cono and co.roll='1803067' and copo.po2='1' GROUP by copo.personid;
+
+    SELECT SUM(co.mark) , SUM(co.fullmark) FROM co, copo WHERE co.cid=copo.cid and  CONCAT('co',copo.co)=co.cono and co.roll='1803067' and copo.po1='1' GROUP by copo.personid
