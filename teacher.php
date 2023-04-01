@@ -4067,11 +4067,6 @@ if (isset($_POST["addfinalComark3"]))
                     mysqli_query($con, $query);
                 }
 
-
-
-
-
-
             }
 
             for ($j = 1; $j <= 5; $j++) 
