@@ -493,9 +493,20 @@ if (isset($_POST["viewPO2"]))
 
                         <div class="d-flex justify-content-center">
                             <div class="list">
-
+                            <div class="list">
                                 <h3 style="text-align: center;"> Course outcome result </h3>
-                    
+                                <?php
+                                $s = "SELECT distinct(courselist.cid) , courselist.ccode , courselist.cname FROM courselist, course WHERE courselist.cid = course.cid and course.personID=$id and courselist.type in('Theory','Lab')";
+                                $result = mysqli_query($con, $s);
+                                $num = mysqli_num_rows($result);
+                                $var = mysqli_fetch_assoc($result);
+                                $ccode=$var['ccode'];
+                                $cname=$var['cname'];
+                                
+                                ?>
+                                <h6 style=" text-align: center;">Course Code :  <?php echo  $ccode ?> </h6>
+                                <h6 style=" text-align: center;">Course Name :  <?php echo  $cname ?> </h6>
+                            </div>
                                 <table class="table table-striped table-bordered"">
                          <tr>
                         <td>
@@ -2686,13 +2697,7 @@ if (isset($_POST["ctsyllabusesign3"]))
 
 
 
-
-
         </div><?php
-
-
-
-
 
 
     }
@@ -2952,10 +2957,6 @@ if (isset($_POST["ctsyllabusesign3"]))
         </div>
 
          <?php
-
-
-
-
 
     }
             
@@ -3571,11 +3572,14 @@ if (isset($_POST["ctsyllabusesign3"]))
                             <input type="text" name="rollEnd" class="form-control" required>
                         </div>
 
-                        <div class="d-flex justify-content-end">
+                        <br>
+                            <div class="form-group"  >
+                                <button type="submit" class="btn btn-success btn-block " name="addfinalComark">add CO mark</button>
+                            </div >
 
-                            <button type="submit" class="btn btn-success" name="getfinalmark">NEXT</button>
-
-                        </div>
+                            <div class="form-group"  >
+                                <button type="submit" class="btn btn-success btn-block " name="getfinalmark">add final mark</button>
+                            </div>
                     </form>
 
                 </div>
@@ -3609,6 +3613,36 @@ if (isset($_POST["ctsyllabusesign3"]))
 
                 }
     }
+
+
+    if (isset($_POST["addfinalComark"]))
+    {
+        echo '<script type="text/javascript">myFunction();</script>';
+
+            $rollStart = $_POST['rollStart'];
+            $rollEnd = $_POST['rollEnd'];
+            $cid = $_POST['course'];
+
+
+            
+
+
+
+
+
+
+
+
+    }
+
+
+    
+
+
+
+
+
+
 
             
     
@@ -5064,7 +5098,7 @@ if (isset($_POST["ctsyllabusesign3"]))
                                         $coid = $COS[$j];
 
                                     ?>
-                                        <td style="text-align: center;"><input type="number" min="0" max="<?php echo $coTotalMark[$coid] ?>" value="<?php echo $value ?>" name="<?php echo "$i$COS[$j]" ?>"></td>
+                                        <td style="text-align: center;"><input type="number" min="0" max=<?php echo $coTotalMark[$coid] ?> value="<?php echo $value ?>" name="<?php echo "$i$COS[$j]" ?>"></td>
 
 
                                     <?php
