@@ -1142,8 +1142,7 @@ if (isset($_POST["ctsyllabusesign2"]))
                          if($num)
                          {
                             $var = mysqli_fetch_assoc($result);
-                            $topic=$var['topic'];
-                         
+                            $topic=$var['topic'];    
 
                          }
                         
@@ -1275,8 +1274,6 @@ if (isset($_POST["ctsyllabusesign3"]))
    <?php
 
 }
-
-
 
 
 
@@ -3624,23 +3621,509 @@ if (isset($_POST["ctsyllabusesign3"]))
             $cid = $_POST['course'];
 
 
+        ?>
+
+        <div class="d-flex justify-content-center">
+            <div class="list">
+
+           <div class="form-group">
+
+             <form  method='post'>
+             <input type="hidden" name="cid" value="<?php echo $cid ?>">
+             <input type="hidden" name="rollStart" value="<?php echo $rollStart ?>">
+            <input type="hidden" name="rollEnd" value="<?php echo $rollEnd ?>">
+                
+
+
+                        <div class="list" >
+                        <h4 style="text-align: center;">Part-A</h4>
+
+                            <table class="table table-striped table-bordered" ">
+                        <tr>
+                            <td>Course outcome  </td>
+                            <td>Total mark </td>
+                        </tr>
+                        <?php
+                         
+                        for ($i = 1; $i <= 5; $i++) 
+                        { 
+                            $xzx='CO'.$i;
+                            $s = "select * from design_ct where ctno='5' && cid='$cid' && co='$xzx' ORDER BY id DESC";
+                            $result = mysqli_query($con, $s);
+                            $num = mysqli_num_rows($result);
+                            $comark='0';
+        
+                            if($num)
+                            { 
+                                $var = mysqli_fetch_assoc($result);
+                                $comark=$var['comark'];
+                                
+                            }
+
+
+
+                            ?><tr><td style=" text-align: center;">CO<?php echo $i ?></td>
+                             
+
+                                <td style="text-align: center;"><input type="number" min="0" max="100" value=<?php echo $comark ?> name="AtotalCO<?php echo $i ?>"></td>
+                                </tr>
+                            <?php
+                        }
+                        ?>
+                            </table>
+
+                        </div>
+
+
+                        <div class="list">
+                             <h4 style="text-align: center;">Part-B</h4>
+
+                            <table class="table table-striped table-bordered" ">
+                        <tr>
+                            <td>Course outcome </td>
             
+                            <td>Total mark </td>
+                        </tr>
+                        <?php
+                         
+                        for ($i = 1; $i <= 5; $i++) 
+                        { 
+                            $xzx='CO'.$i;
+                            $s = "select * from design_ct where ctno='6' && cid='$cid' && co='$xzx' ORDER BY id DESC";
+                            $result = mysqli_query($con, $s);
+                            $num = mysqli_num_rows($result);
+                            $comark='0';
+                         
+                            if($num)
+                            { 
+                                $var = mysqli_fetch_assoc($result);
+                             
+                                $comark=$var['comark'];
+                                
+                            }
+
+                            ?><tr><td style=" text-align: center;">CO<?php echo $i ?></td>
+                            
+                                <td style="text-align: center;"><input type="number" min="0" max="100" value=<?php echo $comark ?> name="BtotalCO<?php echo $i ?>"></td>
+                                </tr>
+                            <?php
+                        }
+                        ?>
+                            </table>
+
+                        </div>
 
 
 
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-success" name="addfinalComark2">NEXT</button>
 
+                                </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-
+        <?php
 
 
     }
 
 
     
+if (isset($_POST["addfinalComark2"]))
+{
+
+    echo '<script type="text/javascript">myFunction();</script>';
+
+    $rollStart = $_POST['rollStart'];
+    $rollEnd = $_POST['rollEnd'];
+    $cid = $_POST['cid'];
+    $AcoTotalMark[] = "";
+    $BcoTotalMark[] = "";
+  
+
+  
+
+    for ($i = 1; $i <= 5; $i++) 
+        { 
+            $xzx='CO'.$i;
+            $AcoTotalMark[$xzx]=$_POST['Atotal'.$xzx];
+            
+            $s = "select * from design_ct where ctno='5' && cid='$cid'  && co='$xzx' ORDER BY id DESC";
+            $result = mysqli_query($con, $s);
+            $num = mysqli_num_rows($result);
+         
+
+            if ($num == 0) 
+            {
+                $query = "INSERT INTO design_ct VALUES('','','$cid','5','$xzx','$AcoTotalMark[$xzx]') ";
+                mysqli_query($con, $query);
+            } 
+            else 
+            {
+                $var = mysqli_fetch_assoc($result);
+                $newID = $var['id'];
+                
+                $query = "UPDATE design_ct SET comark='$AcoTotalMark[$xzx]'   WHERE id=$newID";
+                mysqli_query($con, $query);
+
+            }
+            
+
+        }
+
+       
+
+        for ($i = 1; $i <= 5; $i++) 
+        { 
+            $xzx='CO'.$i;
+            $BcoTotalMark[$xzx]=$_POST['Btotal'.$xzx];
+            
+            $s = "select * from design_ct where ctno='6' && cid='$cid'  && co='$xzx' ORDER BY id DESC";
+            $result = mysqli_query($con, $s);
+            $num = mysqli_num_rows($result);
+    
+
+            if ($num == 0) 
+            {
+                $query = "INSERT INTO design_ct VALUES('','','$cid','6','$xzx','$BcoTotalMark[$xzx]') ";
+                mysqli_query($con, $query);
+            } 
+            else 
+            {
+                $var = mysqli_fetch_assoc($result);
+                $newID = $var['id'];
+                
+                $query = "UPDATE design_ct SET comark='$BcoTotalMark[$xzx]'   WHERE id=$newID";
+                mysqli_query($con, $query);
+
+            }     
+        }
+
+
+        $ds = "SELECT * From courselist WHERE cid=$cid";
+        $dr = mysqli_query($con, $ds);
+        $dv = mysqli_fetch_assoc($dr);
+
+
+
+        ?>
+        <div class="d-flex justify-content-center">
+            <div class="list">
+                <div class="list">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <h5>
+                                    <p> Course Code </p>
+                                </h5>
+                            </div>
+                            <div class="col-sm-1">
+                                <h5>
+                                    <p>:</p>
+                                </h5>
+                            </div>
+                            <div class="col-sm-6">
+                                <h5>
+                                    <p> <?php echo $dv['ccode'] ?> </p>
+                                </h5>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <h5>
+                                    <p> Course Name </p>
+                                </h5>
+                            </div>
+                            <div class="col-sm-1">
+                                <h5>
+                                    <p>:</p>
+                                </h5>
+                            </div>
+                            <div class="col-sm-6">
+                                <h5>
+                                    <p> <?php echo $dv['cname'] ?> </p>
+                                </h5>
+
+                            </div>
+                        </div>
+                    
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h5>
+                                        <p> Semester-final </p>
+                                    </h5>
+                                </div>
+                            </div>
+                        <?php
+                       
+                        ?>
+                    </div>
+                </div>
+
+
+
+                <div class="d-flex justify-content-center">
+                    <form method='post'>
+                        <input type="hidden" name="rollStart" value="<?php echo $rollStart ?>">
+                        <input type="hidden" name="rollEnd" value="<?php echo $rollEnd ?>">
+                        <input type="hidden" name="cid" value="<?php echo $cid ?>">
+            
+
+                        <?php
+                       
+                       for ($i = 1; $i <= 5; $i++) 
+                       { 
+                           $xzx='CO'.$i;
+                        ?>
+                            <input type="hidden" name="Atotal<?php echo $xzx ?>" value="<?php echo $AcoTotalMark["$xzx"] ?>">
+                        <?php
+                        }
+                        for ($i = 1; $i <= 5; $i++) 
+                       { 
+                           $xzx='CO'.$i;
+                        ?>
+                            <input type="hidden" name="Btotal<?php echo $xzx ?>" value="<?php echo $BcoTotalMark["$xzx"] ?>">
+                        <?php
+                        }
+
+                        ?>
+
+
+
+                        <table class="table table-striped table-bordered" style="max-width: 500px;">
+                            <tr>
+                                <td>
+                                    <h5>student Roll</h5>
+                                </td>
+                                <?php
+                                for ($i = 1; $i <= 5; $i++) 
+                                   { 
+                                       $xzx='CO'.$i;
+                                    echo "<td><h5>$xzx<br>[$AcoTotalMark[$xzx]]</h5></td>";
+                                }
+
+                            ?>
+                            <td></td>
+                            <td></td>
+                            
+                            <?php
+                                for ($i = 1; $i <= 5; $i++) 
+                                   { 
+                                       $xzx='CO'.$i;
+                                    echo "<td><h5>$xzx<br>[$BcoTotalMark[$xzx]]</h5></td>";
+                                }
+                                ?>
+                            </tr>
+
+                            <?php
+                            $datatable = 'marks';
+                            for ($i = $rollStart; $i <= $rollEnd; $i++) {
+
+
+                            ?>
+
+                                <tr>
+                                    <td><?php echo $i ?></td>
+
+
+
+                                    <?php
+
+                                        for ($j = 1; $j <= 5; $j++) 
+                                        { 
+                                            $xzx='CO'.$j;
+
+                                        $s = "select * from co where no='5' && cid='$cid' && roll='$i' && cono='$xzx' ORDER BY id DESC";
+                                        $result = mysqli_query($con, $s);
+                                        $num = mysqli_num_rows($result);
+
+                                        $value;
+                                        if ($num == 0) {
+                                            $value = '';
+                                        } else {
+                                            $var = mysqli_fetch_assoc($result);
+                                            $value = $var['mark'];
+                                        }
+                
+
+                                    ?>
+                                        <td style="text-align: center;"><input type="number" min="0" max=<?php echo $AcoTotalMark[$xzx] ?> value="<?php echo $value ?>" name="A<?php echo "$i"."$xzx" ?>"></td>
+
+                                    <?php
+
+                                
+
+                                    }
+
+                                    ?>
+                                    <td></td>
+                                    <td></td>
+
+
+                                    <?php
+
+                                    for ($j = 1; $j <= 5; $j++) 
+                                        { 
+                                            $xzx='CO'.$j;
+
+                                        $s = "select * from co where no='6' && cid='$cid' && roll='$i' && cono='$xzx' ORDER BY id DESC";
+                                        $result = mysqli_query($con, $s);
+                                        $num = mysqli_num_rows($result);
+
+                                        $value;
+                                        if ($num == 0) {
+                                            $value = '';
+                                        } else {
+                                            $var = mysqli_fetch_assoc($result);
+                                            $value = $var['mark'];
+                                        }
+                
+
+                                    ?>
+                                        <td style="text-align: center;"><input type="number" min="0" max=<?php echo $BcoTotalMark[$xzx] ?> value="<?php echo $value ?>" name="B<?php echo "$i"."$xzx" ?>"></td>
+
+
+                                    <?php
+
+
+                                    }
+
+
+                                    ?>
+                                </tr><?php
+
+
+                                    }
+
+                                        ?>
+                                </table>
+
+                        <button type="submit" class="btn btn-success  btn-block" name="addfinalComark3">DONE</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <?php
+
+
+} 
+
+
+if (isset($_POST["addfinalComark3"])) 
+{
+    $rollStart = $_POST['rollStart'];
+    $rollEnd = $_POST['rollEnd'];
+    $cid = $_POST['cid'];
+    $AcoTotalMark[] = "";
+    $BcoTotalMark[] = "";
+
+    for ($i = 1; $i <= 5; $i++) 
+        { 
+            $xzx='CO'.$i;
+            $AcoTotalMark[$xzx]=$_POST['Atotal'.$xzx];
+           
+        }
+
+       
+
+        for ($i = 1; $i <= 5; $i++) 
+        { 
+            $xzx='CO'.$i;
+            $BcoTotalMark[$xzx]=$_POST['Btotal'.$xzx];
+            
+        }
+
+
+        for ($i = $rollStart; $i <= $rollEnd; $i++) {
+
+
+            for ($j = 1; $j <= 5; $j++) 
+            { 
+                $xzx='CO'.$j;
+                $name="A".$i.$xzx;
+                $mark=$_POST[$name];
+
+
+
+                $s = "select * from co where no='5' && cid='$cid' && roll='$i' && cono='$xzx' ORDER BY id DESC";
+                $result = mysqli_query($con, $s);
+                $num = mysqli_num_rows($result);
+
+                if ($num == 0) {
+                    $query = "INSERT INTO co VALUES('','$i','$cid','5','$xzx','$mark','$AcoTotalMark[$xzx]') ";
+
+
+                    mysqli_query($con, $query);
+                } else {
+                    $var = mysqli_fetch_assoc($result);
+                    $newID = $var['id'];
+
+                    $query = "UPDATE co  SET mark='$mark' ,fullmark='$AcoTotalMark[$xzx]' WHERE id=$newID";
+
+                    mysqli_query($con, $query);
+                }
 
 
 
 
+
+
+            }
+
+            for ($j = 1; $j <= 5; $j++) 
+                { 
+                    $xzx='CO'.$j;
+                 $name="B".$i.$xzx;
+
+                 $mark=$_POST[$name];
+
+
+
+                 $s = "select * from co where no='6' && cid='$cid' && roll='$i' && cono='$xzx' ORDER BY id DESC";
+                 $result = mysqli_query($con, $s);
+                 $num = mysqli_num_rows($result);
+ 
+                 if ($num == 0) {
+                     $query = "INSERT INTO co VALUES('','$i','$cid','6','$xzx','$mark','$BcoTotalMark[$xzx]') ";
+ 
+ 
+                     mysqli_query($con, $query);
+                 } else {
+                     $var = mysqli_fetch_assoc($result);
+                     $newID = $var['id'];
+ 
+                     $query = "UPDATE co  SET mark='$mark' ,fullmark='$BcoTotalMark[$xzx]' WHERE id=$newID";
+ 
+                     mysqli_query($con, $query);
+                 }
+
+
+                }
+
+
+    }
+
+
+
+
+
+    ?>
+    <div class="d-flex justify-content-center">
+        <div class="list">
+            <h3>Data Store successfully</h3>
+        </div>
+    </div>
+    <?php
+
+
+
+
+
+}
 
 
 
