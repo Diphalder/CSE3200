@@ -874,7 +874,7 @@ if (isset($_POST["viewPO2"]))
                                         data: <?php echo json_encode($vall); ?>,
                                     }]
                                 },
-                                options: {
+                                options:{
                                     legend: {
                                         display: true,
                                         position: 'bottom',
@@ -885,8 +885,14 @@ if (isset($_POST["viewPO2"]))
                                             fontSize: 14,
                                         }
                                     },
-
-
+                                    scales: {
+                                        yAxes: [{
+                                            ticks: {
+                                                beginAtZero: true,
+                                                max: 100
+                                            }
+                                        }]
+                                    }
                                 }
                             });
                         </script>
@@ -2405,11 +2411,11 @@ if (isset($_POST["ctsyllabusesign3"]))
                         echo "<tr>";
                         echo "<td>$i</td>";
 
-                        $s = "select sum(mark) as mark from co where cid='$course' && roll='$i' ";
+                        $s = "select sum(mark) as mark from co where cid='$course' && roll='$i'  && no<>6 && no<>5 ";
                         $result = mysqli_query($con, $s);
                         $dvv = mysqli_fetch_assoc($result);
                         $mark = $dvv['mark'];
-                        $s = "select sum(fullmark) as mark from co where cid='$course' && roll='$i' ";
+                        $s = "select sum(fullmark) as mark from co where cid='$course' && roll='$i' && no<>6 && no<>5  ";
                         $result = mysqli_query($con, $s);
                         $dvv = mysqli_fetch_assoc($result);
                         $fullmark = $dvv['mark'];
@@ -2418,9 +2424,35 @@ if (isset($_POST["ctsyllabusesign3"]))
                         } else {
                             $per = ($mark * 100) / $fullmark;
                         }
-                        $totalper += $per;
+                       
+
+                        $kkkk=$per;
+
+
+
+                        $s = "select sum(mark) as mark from co where cid='$course' && roll='$i'  && (no=6 || no=5 )";
+                        $result = mysqli_query($con, $s);
+                        $dvv = mysqli_fetch_assoc($result);
+                        $mark = $dvv['mark'];
+                        $s = "select sum(fullmark) as mark from co where cid='$course' && roll='$i'  && (no=6 || no=5 )";
+                        $result = mysqli_query($con, $s);
+                        $dvv = mysqli_fetch_assoc($result);
+                        $fullmark = $dvv['mark'];
+                        if ($fullmark == 0) {
+                            $per = '0';
+                        } else {
+                            $per = ($mark * 100) / $fullmark;
+
+                            $per = ($per / 72) * 100 ;
+                        }
+                       
+
+                        $per+= $kkkk;
+
+                        $per/=2;
 
                         $per = round($per, 2);
+                        $totalper += $per;
                         
 
                     ?>
@@ -2440,12 +2472,12 @@ if (isset($_POST["ctsyllabusesign3"]))
 
                         for ($j = 1; $j <= 5; $j++) {
                             $xyz = "CO" . $j;
-                            $s = "select sum(mark) as mark from co where cono='$xyz' && cid='$course' && roll='$i' ";
+                            $s = "select sum(mark)  as mark from co where cono='$xyz' && cid='$course' && roll='$i' && no<>6 && no<>5 ";
                             $result = mysqli_query($con, $s);
                             $dvv = mysqli_fetch_assoc($result);
                             $mark = $dvv['mark'];
 
-                            $s = "select sum(fullmark) as mark from co where cono='$xyz' && cid='$course' && roll='$i' ";
+                            $s = "select sum(fullmark) as mark from co where cono='$xyz' && cid='$course' && roll='$i' && no<>6 && no<>5 ";
                             $result = mysqli_query($con, $s);
                             $dvv = mysqli_fetch_assoc($result);
                             $fullmark = $dvv['mark'];
@@ -2454,13 +2486,51 @@ if (isset($_POST["ctsyllabusesign3"]))
                             } else {
                                 $perr = ($mark * 100) / $fullmark;
                             }
-                            if($per>=60)
+                        
+
+                            $perr = round($perr, 2);
+                            
+
+                            $kkkk = $perr;
+
+
+
+
+                            $xyz = "CO" . $j;
+                            $s = "select sum(mark)  as mark from co where cono='$xyz' && cid='$course' && roll='$i' && (no=6 || no=5 )";
+                            $result = mysqli_query($con, $s);
+                            $dvv = mysqli_fetch_assoc($result);
+                            $mark = $dvv['mark'];
+
+                            $s = "select sum(fullmark) as mark from co where cono='$xyz' && cid='$course' && roll='$i'  && (no=6 || no=5 )";
+                            $result = mysqli_query($con, $s);
+                            $dvv = mysqli_fetch_assoc($result);
+                            $fullmark = $dvv['mark'];
+                            if ($fullmark == 0) {
+                                $perr = '0';
+                            } else {
+                                $perr = ($mark * 100) / $fullmark;
+                                $perr = ($perr / 72) * 100 ;
+                            }
+
+                            $perr +=  $kkkk;
+
+                            $perr/=2;
+
+                            if($perr>=60)
                             {
                                 $valid[$j]++;
                             }
 
                             $perr = round($perr, 2);
                             $totalco[$j] += $perr;
+
+
+
+
+
+
+
 
                         ?>
 
@@ -2552,7 +2622,7 @@ if (isset($_POST["ctsyllabusesign3"]))
                                             "#ff407b",
                                             "#2ec551",
                                             "#ff407b"
-                                            
+
                                         ],
                                         data: <?php echo json_encode($vvall); ?>,
                                     }]
@@ -2568,11 +2638,18 @@ if (isset($_POST["ctsyllabusesign3"]))
                                             fontSize: 14,
                                         }
                                     },
-
-
+                                    scales: {
+                                        yAxes: [{
+                                            ticks: {
+                                                beginAtZero: true,
+                                                max: 100
+                                            }
+                                        }]
+                                    }
                                 }
                             });
                         </script>
+
             
 
                 </div>
@@ -2679,8 +2756,14 @@ if (isset($_POST["ctsyllabusesign3"]))
                                             fontSize: 14,
                                         }
                                     },
-
-
+                                    scales: {
+                                        yAxes: [{
+                                            ticks: {
+                                                beginAtZero: true,
+                                                max: 100
+                                            }
+                                        }]
+                                    }
                                 }
                             });
                         </script>

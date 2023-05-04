@@ -1185,8 +1185,14 @@ if (isset($_POST["viewPO2"]))
                                             fontSize: 14,
                                         }
                                     },
-
-
+                                    scales: {
+                                        yAxes: [{
+                                            ticks: {
+                                                beginAtZero: true,
+                                                max: 100
+                                            }
+                                        }]
+                                    }
                                 }
                             });
                         </script>
@@ -2048,11 +2054,11 @@ if (isset($_POST["viewCO2"]))
                 echo "<td>$course[$i]</td>";
 
 
-                $s = "select sum(mark) as mark from co where cid='$cid[$i]' && roll='$roll' ";
+                $s = "select sum(mark) as mark from co where cid='$cid[$i]' && roll='$roll'  && no<>6 && no<>5";
                 $result = mysqli_query($con, $s);
                 $dvv = mysqli_fetch_assoc($result);
                 $mark = $dvv['mark'];
-                $s = "select sum(fullmark) as mark from co where cid='$cid[$i]' && roll='$roll' ";
+                $s = "select sum(fullmark) as mark from co where cid='$cid[$i]' && roll='$roll'  && no<>6 && no<>5";
                 $result = mysqli_query($con, $s);
                 $dvv = mysqli_fetch_assoc($result);
                 $fullmark = $dvv['mark'];
@@ -2062,6 +2068,31 @@ if (isset($_POST["viewCO2"]))
                 } else {
                     $per = ($mark * 100) / $fullmark;
                 }
+
+                $kkkkkk = $per;
+
+
+                
+
+                $s = "select sum(mark) as mark from co where cid='$cid[$i]' && roll='$roll'  && (no=6 || no=5 )";
+                $result = mysqli_query($con, $s);
+                $dvv = mysqli_fetch_assoc($result);
+                $mark = $dvv['mark'];
+                $s = "select sum(fullmark) as mark from co where cid='$cid[$i]' && roll='$roll'  && (no=6 || no=5 )";
+                $result = mysqli_query($con, $s);
+                $dvv = mysqli_fetch_assoc($result);
+                $fullmark = $dvv['mark'];
+
+                if ($fullmark == 0) {
+                    $per = '0';
+                } else {
+                    $per = ($mark * 100) / $fullmark;
+
+                    $per = ($per / 72) * 100 ;
+                }
+
+                $per+=$kkkkkk;
+                $per/=2;
 
 
                 $per = round($per, 2);
@@ -2087,12 +2118,12 @@ if (isset($_POST["viewCO2"]))
 
                             for ($j = 1; $j <= 5; $j++) {
                                 $xyz = "CO" . $j;
-                                $s = "select sum(mark) as mark from co where cono='$xyz' && cid='$cid[$i]' && roll='$roll' ";
+                                $s = "select sum(mark) as mark from co where cono='$xyz' && cid='$cid[$i]' && roll='$roll'  && no<>6 && no<>5 ";
                                 $result = mysqli_query($con, $s);
                                 $dvv = mysqli_fetch_assoc($result);
                                 $mark = $dvv['mark'];
 
-                                $s = "select sum(fullmark) as mark from co where cono='$xyz' && cid='$cid[$i]' && roll='$roll' ";
+                                $s = "select sum(fullmark) as mark from co where cono='$xyz' && cid='$cid[$i]' && roll='$roll'  && no<>6 && no<>5 ";
                                 $result = mysqli_query($con, $s);
                                 $dvv = mysqli_fetch_assoc($result);
                                 $fullmark = $dvv['mark'];
@@ -2100,9 +2131,37 @@ if (isset($_POST["viewCO2"]))
                                     $perr = '0';
                                 } else {
                                     $perr = ($mark * 100) / $fullmark;
+
                                     $totalco[0] += $mark;
                                     $totalco[1] += $fullmark;
                                 }
+
+                                $kkkkkk = $perr;
+
+
+
+
+                                $xyz = "CO" . $j;
+                                $s = "select sum(mark) as mark from co where cono='$xyz' && cid='$cid[$i]' && roll='$roll' && (no=6 || no=5 )";
+                                $result = mysqli_query($con, $s);
+                                $dvv = mysqli_fetch_assoc($result);
+                                $mark = $dvv['mark'];
+
+                                $s = "select sum(fullmark) as mark from co where cono='$xyz' && cid='$cid[$i]' && roll='$roll' && (no=6 || no=5 )";
+                                $result = mysqli_query($con, $s);
+                                $dvv = mysqli_fetch_assoc($result);
+                                $fullmark = $dvv['mark'];
+                                if ($fullmark == 0) {
+                                    $perr = '0';
+                                } else {
+                                    $perr = ($mark * 100) / $fullmark;
+                                    $perr = ($perr / 72) * 100 ;
+                                    $totalco[0] += $mark;
+                                    $totalco[1] += $fullmark;
+                                }
+
+                                $perr+=$kkkkkk;
+                                $perr/=2;
 
                                 $perr = round($perr, 2);
 
@@ -2303,7 +2362,7 @@ if (isset($_POST["viewCO2"]))
                                         data: <?php echo json_encode($vall); ?>,
                                     }]
                                 },
-                                options: {
+                                options:{
                                     legend: {
                                         display: true,
                                         position: 'bottom',
@@ -2314,8 +2373,14 @@ if (isset($_POST["viewCO2"]))
                                             fontSize: 14,
                                         }
                                     },
-
-
+                                    scales: {
+                                        yAxes: [{
+                                            ticks: {
+                                                beginAtZero: true,
+                                                max: 100
+                                            }
+                                        }]
+                                    }
                                 }
                             });
                         </script>
