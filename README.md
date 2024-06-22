@@ -56,7 +56,8 @@ The RUET Assistant login page provides a secure and user-friendly interface for 
 ### Account Creation
 
 Users can create an account by providing the necessary information based on their roles:
-
+![Login Page](ss/Screenshot (1).png)
+![Create an new account page](ss/Screenshot (40).png)
 1. **Common Information:**
    - **Name:** Full name of the user.
    - **Email:** Valid email address for communication and account verification.
