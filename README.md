@@ -143,6 +143,6 @@ Users can create an account by providing the necessary information based on thei
 ## Result-Sheet of a course
 <img src="ss/Screenshot (27).png" height="300"/>
 
+# Database
 
-
-
+<img src="ss/Screenshot (41).png" height="500"/>
