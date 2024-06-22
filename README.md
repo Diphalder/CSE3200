@@ -46,3 +46,26 @@ RUET Assistant is a powerful web application developed to serve the academic com
   - Enhanced ability to manage student and teacher data.
 
 RUET Assistant is dedicated to improving the academic workflow and fostering a productive educational environment at RUET. Join us in making academic management more efficient and effective.
+
+## RUET Assistant - Login Page
+
+The RUET Assistant login page provides a secure and user-friendly interface for students, teachers, and administrators to create accounts and log in to access the system. Here is a detailed description of the functionalities and information required for account creation and login.
+
+
+
+### Account Creation
+
+Users can create an account by providing the necessary information based on their roles:
+
+1. **Common Information:**
+   - **Name:** Full name of the user.
+   - **Email:** Valid email address for communication and account verification.
+   - **Phone Number:** Contact number for further communication.
+   - **Department:** The department the user belongs to.
+   - **Password:** A secure password for account access.
+
+2. **Additional Information for Students:**
+   - **Roll Number:** Unique roll number assigned to the student.
+   - **Semester:** Current semester of the student.
+   - **Year:** Academic year of the student.
+
